@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>欢歌笑语</title>
+  <title>WebAssembly的手动逆向 | 欢歌笑语</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="欢歌笑语">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="原文链接：https://www.forcepoint.com/blog/security-labs/manual-reverse-engineering-webassembly-static-code-analysis">
+<meta name="keywords" content="看雪翻译小组,WebAssembly">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebAssembly的手动逆向">
+<meta property="og:url" content="http://yoursite.com/2018/11/12/translate01/index.html">
 <meta property="og:site_name" content="欢歌笑语">
+<meta property="og:description" content="原文链接：https://www.forcepoint.com/blog/security-labs/manual-reverse-engineering-webassembly-static-code-analysis">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://www.forcepoint.com/sites/default/files/inline/201810_wasmiv_figure1.png">
+<meta property="og:updated_time" content="2018-11-12T05:16:19.536Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="欢歌笑语">
+<meta name="twitter:title" content="WebAssembly的手动逆向">
+<meta name="twitter:description" content="原文链接：https://www.forcepoint.com/blog/security-labs/manual-reverse-engineering-webassembly-static-code-analysis">
+<meta name="twitter:image" content="https://www.forcepoint.com/sites/default/files/inline/201810_wasmiv_figure1.png">
   
     <link rel="alternative" href="/atom.xml" title="欢歌笑语" type="application/atom+xml">
   
@@ -154,16 +161,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-translate01" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+            <article id="post-translate01" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/12/translate01/">WebAssembly的手动逆向</a>
+    <h1 class="article-title" itemprop="name">
+      WebAssembly的手动逆向
     </h1>
   
 
@@ -179,9 +184,178 @@
         <blockquote>
 <p>原文链接：<a href="https://www.forcepoint.com/blog/security-labs/manual-reverse-engineering-webassembly-static-code-analysis" target="_blank" rel="noopener">https://www.forcepoint.com/blog/security-labs/manual-reverse-engineering-webassembly-static-code-analysis</a></p>
 </blockquote>
-        
-          <a class="article-more-a" href="/2018/11/12/translate01/#more">more >></a>
-        
+<a id="more"></a>
+<p>在我们上一篇关于WebAssembly（Wasm）的<a href="https://www.forcepoint.com/blog/security-labs/analyzing-webassembly-binaries-initial-feel-and-behavioral-analysis" target="_blank" rel="noopener">博客</a>中，我们初步了解了一个未知的Wasm二进制文件，并对其进行了一些行为分析。今天我们将继续深入研究相同的Wasm样本。我们将通过研究Wasm文本格式手动分析该样本。</p>
+<blockquote>
+<p>为了能够手动分析Wasm文本，我们首先需要学习更多理论。我们之前的博文描述了如何处理内存和数据。在此基础上，我们将介绍一些对逆向Wasm有用的概念，然后应用这些知识来分析Wasm样本。</p>
+</blockquote>
+<blockquote>
+<p>注意：这篇文章是系列文章的一部分。该系列的上一篇文章介绍了Wasm内存处理，所以可能需要阅读<a href="https://www.forcepoint.com/blog/security-labs/analyzing-webassembly-binaries-initial-feel-and-behavioral-analysis" target="_blank" rel="noopener">这些文章</a>。</p>
+</blockquote>
+<h2 id="Wasm指令集"><a href="#Wasm指令集" class="headerlink" title="Wasm指令集"></a>Wasm指令集</h2><p>正如我们在今年早些时候<a href="https://www.forcepoint.com/blog/security-labs/webassembly-potentials-and-pitfalls" target="_blank" rel="noopener">讨论</a>的那样，Wasm本身不能与外界联系。与外部环境的所有通信都需要通过JavaScript API调用。考虑到这一点，我们现在主要讨论那些Wasm中对实际计算一些有用的指令 ，而不是调用JavaScript的指令。<br>与x86或x64的指令集相比，Wasm的指令集非常小，有几组不同的功能：</p>
+<ul>
+<li>算术指令</li>
+<li>控制流指令</li>
+<li>内存访问指令</li>
+<li>比较指令</li>
+<li>转换指令</li>
+</ul>
+<p>以下是常见Wasm指令的几个示例。有关更全面的说明列表，请参阅<a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#instructions" target="_blank" rel="noopener">参考手册</a>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">get_local \<variable></variable></td>
+<td style="text-align:center">获取本地存储中变量的值，将其压入堆栈使其可用于后续指令</td>
+</tr>
+</tbody>
+</table>
+<p>set_local \<variable>|设置本地存储中变量的值，从堆栈中弹出值并将该值分配给相关的局部变量|<br>|get_global \<variable>|获取全局变量的值|<br>|set_global \<variable>|设置全局变量的值|<br>|i32.add|从堆栈中弹出两个数字相加，并将结果压入堆栈|<br>|call\<func nbr\="">|直接调用指定的函数号|<br>|call_indirect \&lt;var>|调用函数号在运行时生成的函数|<br>|if/else/end|条件分支|<br>|br|无条件分支|<br>|br_if|条件分支|<br>|loop|定义要循环的代码块|<br>|block|定义一个代码块|<br>|return|函数返回|</func></variable></variable></variable></p>
+<h2 id="了解文本格式"><a href="#了解文本格式" class="headerlink" title="了解文本格式"></a>了解文本格式</h2><p>上面给出是WebAssembly文本格式的说明。由于Wasm是二进制格式，因此这些文本指令将在编译文件中用字节码表示。</p>
+<p>让我们分析一个简单的函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(func $max (; 0 ;) (param $0 i32) (param $1 i32) (result i32)</span><br><span class="line">  (select</span><br><span class="line">   (get_local $0)</span><br><span class="line">   (get_local $1)</span><br><span class="line">   (i32.gt_s</span><br><span class="line">    (get_local $0)</span><br><span class="line">    (get_local $1)</span><br><span class="line">   )</span><br><span class="line">  )</span><br><span class="line"> )</span><br></pre></td></tr></table></figure>
+<p>第一行表示一个名为’max’的函数，以两个整数作为参数，$0和$1，并返回一个整数，放在i32中。</p>
+<p>‘<a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#select" target="_blank" rel="noopener">select</a>‘指令有三个参数：第一个操作数（get_local $0），第二个操作数（get_local $1）和一个条件参数（在这种情况下是i32.gt_s指令及其相关的操作数）。如果条件操作数不为零，则’Select’返回第一个操作数，否则返回第二个操作数。</p>
+<p>在select中，指令’<a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#integer-greater-than-signed" target="_blank" rel="noopener">i32.gt_s</a>‘检查第一个参数（get_local $0）是否大于第二个参数（get_local $1）。此检查的结果将保存在“select”运算符的条件操作数中。</p>
+<p>因此，如果第一个参数大于第二个参数，则返回第一个参数，否则返回第二个参数。</p>
+<p>请注意，不同的工具表示的Wasm文本格式可能会略微不同（就像不同的反汇编器一样）。例如，上面的例子也可以这样表示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(func (;0;) (type 0) (param i32 i32) (result i32)</span><br><span class="line">  get_local 0</span><br><span class="line">  get_local 1</span><br><span class="line">  get_local 0</span><br><span class="line">  get_local 1</span><br><span class="line">  i32.gt_s</span><br><span class="line">  select)</span><br></pre></td></tr></table></figure></p>
+<p>无论我们使用何种文本表示，它都对应于以下高级语言：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int max（int a，int b）&#123; </span><br><span class="line">  return a&gt; b？a：b; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>有关Wasm文本格式的更多信息，请访问<a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format" target="_blank" rel="noopener">此处</a>。</p>
+<h2 id="使用wasm2wat进行静态代码分析"><a href="#使用wasm2wat进行静态代码分析" class="headerlink" title="使用wasm2wat进行静态代码分析"></a>使用wasm2wat进行静态代码分析</h2><p>现在，我们有堆机(?)，局部变量，全局内存，数据存储（如我们以前的<a href="https://www.forcepoint.com/blog/security-labs/analyzing-webassembly-binaries-initial-feel-and-behavioral-analysis" target="_blank" rel="noopener">帖子</a>提到的），指令集和Wasm文本格式，接下来用所学知识深入分析之前的博客文章中的<a href="https://github.com/dominictarr/quicksort.wasm/blob/master/quicksort.wasm" target="_blank" rel="noopener">Wasm示例</a>。</p>
+<p>从之前的位置继续：最初的浅层分析和行为分析表明我们正在处理的是排序算法。对于这个样本，分析可能会在此时就完成了，具体取决于您可以在一个样品上花费多少时间。</p>
+<p>如果我们处理的是一个功能不那么明显的样本怎么办？您可能经常需要查看源代码，接下来进行这项操作。</p>
+<p>为了处理代码，我们将再次使用我们之前的博文中的wasm2wat工具。我们已经发现sort函数是函数号是1。下面是Wasm文本表示的该函数的第一部分：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ./wasm2wat quicksort.wasm</span><br><span class="line">[snip]</span><br><span class="line">  (func (;1;) (type 1) (param i32 i32) (result i32)</span><br><span class="line">    (local i32)</span><br></pre></td></tr></table></figure></p>
+<p>它从函数定义开始，表示函数使用两个整数并返回一个整数。然后定义了一个局部变量local i32。用高级伪代码表示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func sort(int param1, int param2) &#123;</span><br><span class="line">  int var1;</span><br></pre></td></tr></table></figure></p>
+<p>Wasm代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">get_local 0</span><br><span class="line">get_local 1</span><br><span class="line">i32.ge_s</span><br><span class="line">if  ;; label = @1</span><br><span class="line">  get_local 1</span><br><span class="line">  return</span><br><span class="line">end</span><br></pre></td></tr></table></figure></p>
+<p>前两个指令get_local0/1分别获取第一个和第二个函数参数的值，并将它们压入堆栈。然后第三条指令<a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#integer-greater-than-or-equal-to-signed" target="_blank" rel="noopener">i32.ge_s</a>将对堆栈上的这两个值进行操作，通过隐式弹出它们然后判断第一个值是否大于或等于第二个值。比较的结果将被压入堆栈。如果堆栈顶部的值为非零值，则后续if语句将为true。换句话说，if语句的分支将取决于前面的三条指令。</p>
+<p>如前所述，相同的代码可以用不同的方式表示。如果上面的if语句难以理解，这里有一个替代表示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(if</span><br><span class="line"> (i32.ge_s</span><br><span class="line">  (get_local $var$0)</span><br><span class="line">  (get_local $var$1)</span><br><span class="line"> )</span><br></pre></td></tr></table></figure></p>
+<p>到目前为止我们所逆向的内容可以用高级伪代码表示，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func sort(int param1, int param2) &#123;</span><br><span class="line">  int var1;</span><br><span class="line">  if (param1 &gt;= param2)</span><br><span class="line">    return param2;</span><br></pre></td></tr></table></figure></p>
+<p>继续使用wasm2wat查看Wasm文本格式，发现sort函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">get_local 0</span><br><span class="line">get_local 1</span><br><span class="line">i32.add</span><br><span class="line">i32.const 4</span><br><span class="line">i32.div_s</span><br><span class="line">i32.const 2</span><br><span class="line">i32.div_s</span><br><span class="line">i32.const 4</span><br><span class="line">i32.mul</span><br></pre></td></tr></table></figure></p>
+<p>这段代码进行数学计算。get_local 0/1指令获取传递给函数的两个参数值，随后的’<a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#integer-add" target="_blank" rel="noopener">i32.add</a>‘指令对这两个值进行操作，把它们相加并将结果压入栈中。</p>
+<p>之后’<a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#constant" target="_blank" rel="noopener">i32.const</a> 4’指令将4压入堆栈。后续指令<a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#constant" target="_blank" rel="noopener">i32.div_s</a>将堆栈顶部第二项的值除以最顶部的值。换句话说，先前param1+param2的值将被除以4。在此之后，我们再次执行相同的模式，但这次除以2。同样，接下来的两条指令是i32.mul指令，操作数是4。</p>
+<p>最终结果是目前获得的值乘以4。可以更简洁地表示为，代码执行以下计算：(param1 + param2)/4/2 * 4。</p>
+<p>让我们看看随后的Wasm代码，右侧添加了我们的注释：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">set_local 2</td>
+<td style="text-align:left">局部变量var1=堆栈顶部的值：(param1 + param2)/4/2*4</td>
+</tr>
+<tr>
+<td style="text-align:center">get_local 0</td>
+<td style="text-align:left">将param1放入堆栈，准备函数调用</td>
+</tr>
+<tr>
+<td style="text-align:center">get_local 1</td>
+<td style="text-align:left">将param2放入堆栈，准备函数调用</td>
+</tr>
+<tr>
+<td style="text-align:center">get_local 2</td>
+<td style="text-align:left">将var1放入堆栈，准备函数调用</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#load" target="_blank" rel="noopener">i32.load</a></td>
+<td style="text-align:left">弹出栈顶的值，作为指向全局内存的指针，然后获取它指向的数据并将该数据压入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:center">call 0</td>
+<td style="text-align:left">使用刚刚设置的参数,调用函数0(名为“partition”)</td>
+</tr>
+<tr>
+<td style="text-align:center">set_local 2</td>
+<td style="text-align:left">局部变量var1=函数调用的返回值</td>
+</tr>
+</tbody>
+</table>
+<p>再一次，用高级伪代码表达：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var1 = (param1 + param2) / 4 / 2 * 4;</span><br><span class="line">var1 = call partition(*var1,param2,param1);</span><br></pre></td></tr></table></figure></p>
+<p>如果这很难掌握，请尝试在Chrome中运行示例，单步执行并在调试器中查看（即DevTools）堆栈和局部变量值的变化，以及全局内存的构造。一篇<a href="https://www.forcepoint.com/blog/security-labs/analyzing-webassembly-binaries" target="_blank" rel="noopener">关于Wasm分析的早期博文</a>介绍了做法。当我们位于’call 0’指令时，在执行之前，局部变量和堆栈将如下所示：</p>
+<p><img src="https://www.forcepoint.com/sites/default/files/inline/201810_wasmiv_figure1.png" alt="图片"></p>
+<p>继续查看Wasm代码：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指令</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">get_local 0</td>
+<td style="text-align:left">将param1压入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:left">get_local 2</td>
+<td style="text-align:left">将var1压入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:left">i32.const 4</td>
+<td style="text-align:left">将4压入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#integer-subtract" target="_blank" rel="noopener">i32.sub</a></td>
+<td style="text-align:left">从var1中减去4（仅在堆栈上，而不是在局部变量内存中）</td>
+</tr>
+<tr>
+<td style="text-align:left">call 1</td>
+<td style="text-align:left">调用排序函数</td>
+</tr>
+<tr>
+<td style="text-align:left">drop</td>
+<td style="text-align:left">丢弃排序调用中的返回值</td>
+</tr>
+<tr>
+<td style="text-align:left">get_local 2</td>
+<td style="text-align:left">将var1压入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:left">i32.const 4</td>
+<td style="text-align:left">将4压入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:left">i32.add</td>
+<td style="text-align:left">将var 4和var1相加(仅在堆栈上，而不是在局部变量内存中)</td>
+</tr>
+<tr>
+<td style="text-align:left">get_local 1</td>
+<td style="text-align:left">将param2放入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:left">call 1</td>
+<td style="text-align:left">调用sort函数</td>
+</tr>
+<tr>
+<td style="text-align:left">drop</td>
+<td style="text-align:left">丢弃排序调用中的返回值</td>
+</tr>
+<tr>
+<td style="text-align:left">get_local 2</td>
+<td style="text-align:left">返回var1(堆栈中最后剩下的项将是返回值)</td>
+</tr>
+</tbody>
+</table>
+<p>用高级伪代码表示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">call sort(var1 - 4, param1);</span><br><span class="line">call sort(param2, var1 + 4)</span><br><span class="line">return var1;</span><br></pre></td></tr></table></figure></p>
+<p>总而言之，我们的最终结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func sort(int param1, int param2) &#123;</span><br><span class="line">  int var1;</span><br><span class="line">  if (param1 &gt;= param2)</span><br><span class="line">    return param2;</span><br><span class="line">  var1 = (param1 + param2) / 4 / 2 * 4;</span><br><span class="line">  var1 = call partition(*var1,param2,param1);</span><br><span class="line">  call sort(var1 - 4, param1);</span><br><span class="line">  call sort(param2, var1 + 4)</span><br><span class="line">  return var1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们发现这确实是一个QuickSort实现。如果您愿意，可以通过将上述伪代码与您在Internet上找到的某些现有实现进行比较验证。逆向 partition函数留给读者练习。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我们现在成功地逆向了完整的Wasm功能。首先，我们使用wasm2wat程序将Wasm二进制格式转换为其文本格式，并通过分析文本格式，我们能够创建算法的高级伪代码。</p>
+<p>存在用于执行自动反编译的工具，一种比我们今天所做的更有效的逆向工程方法。虽然自动反编译可以节省时间，但它通常不完美，对手动分析的理解使我们能够解决这些不完善之处。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format</a></li>
+<li><a href="https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#instructions" target="_blank" rel="noopener">https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#instructions</a></li>
+<li><a href="https://www.pnfsoftware.com/reversing-wasm.pdf" target="_blank" rel="noopener">https://www.pnfsoftware.com/reversing-wasm.pdf</a></li>
+<li><a href="https://sophos.files.wordpress.com/2018/08/sophos-understanding-web-assembly.pdf" target="_blank" rel="noopener">https://sophos.files.wordpress.com/2018/08/sophos-understanding-web-assembly.pdf</a></li>
+</ul>
+
       
 
       
@@ -207,16 +381,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/12/translate01/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/11/12/translate01/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2018/11/11/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello World</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -236,79 +469,14 @@
 
 
 
-
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/11/hello-world/">Hello World</a>
-    </h1>
   
 
-        
-        <a href="/2018/11/11/hello-world/" class="archive-article-date">
-  	<time datetime="2018-11-11T13:18:45.904Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/11/hello-world/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
+  
 
   
+
   
 
 
@@ -331,8 +499,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
