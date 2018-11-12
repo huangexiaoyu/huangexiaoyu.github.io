@@ -17,7 +17,7 @@
 <meta property="og:description" content="原文链接：https://www.forcepoint.com/blog/security-labs/manual-reverse-engineering-webassembly-static-code-analysis">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://www.forcepoint.com/sites/default/files/inline/201810_wasmiv_figure1.png">
-<meta property="og:updated_time" content="2018-11-12T05:16:19.536Z">
+<meta property="og:updated_time" content="2018-11-12T05:22:36.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebAssembly的手动逆向">
 <meta name="twitter:description" content="原文链接：https://www.forcepoint.com/blog/security-labs/manual-reverse-engineering-webassembly-static-code-analysis">
@@ -213,9 +213,56 @@
 <td style="text-align:center">get_local \<variable></variable></td>
 <td style="text-align:center">获取本地存储中变量的值，将其压入堆栈使其可用于后续指令</td>
 </tr>
+<tr>
+<td style="text-align:center">set_local \<variable></variable></td>
+<td style="text-align:center">设置本地存储中变量的值，从堆栈中弹出值并将该值分配给相关的局部变量</td>
+</tr>
+<tr>
+<td style="text-align:center">get_global \<variable></variable></td>
+<td style="text-align:center">获取全局变量的值</td>
+</tr>
+<tr>
+<td style="text-align:center">set_global \<variable></variable></td>
+<td style="text-align:center">设置全局变量的值</td>
+</tr>
+<tr>
+<td style="text-align:center">i32.add</td>
+<td style="text-align:center">从堆栈中弹出两个数字相加，并将结果压入堆栈</td>
+</tr>
+<tr>
+<td style="text-align:center">call\<func nbr\=""></func></td>
+<td style="text-align:center">直接调用指定的函数号</td>
+</tr>
+<tr>
+<td style="text-align:center">call_indirect \&lt;var></td>
+<td style="text-align:center">调用函数号在运行时生成的函数</td>
+</tr>
+<tr>
+<td style="text-align:center">if/else/end</td>
+<td style="text-align:center">条件分支</td>
+</tr>
+<tr>
+<td style="text-align:center">br</td>
+<td style="text-align:center">无条件分支</td>
+</tr>
+<tr>
+<td style="text-align:center">br_if</td>
+<td style="text-align:center">条件分支</td>
+</tr>
+<tr>
+<td style="text-align:center">loop</td>
+<td style="text-align:center">定义要循环的代码块</td>
+</tr>
+<tr>
+<td style="text-align:center">block</td>
+<td style="text-align:center">定义一个代码块</td>
+</tr>
+<tr>
+<td style="text-align:center">return</td>
+<td style="text-align:center">函数返回</td>
+</tr>
 </tbody>
 </table>
-<p>set_local \<variable>|设置本地存储中变量的值，从堆栈中弹出值并将该值分配给相关的局部变量|<br>|get_global \<variable>|获取全局变量的值|<br>|set_global \<variable>|设置全局变量的值|<br>|i32.add|从堆栈中弹出两个数字相加，并将结果压入堆栈|<br>|call\<func nbr\="">|直接调用指定的函数号|<br>|call_indirect \&lt;var>|调用函数号在运行时生成的函数|<br>|if/else/end|条件分支|<br>|br|无条件分支|<br>|br_if|条件分支|<br>|loop|定义要循环的代码块|<br>|block|定义一个代码块|<br>|return|函数返回|</func></variable></variable></variable></p>
 <h2 id="了解文本格式"><a href="#了解文本格式" class="headerlink" title="了解文本格式"></a>了解文本格式</h2><p>上面给出是WebAssembly文本格式的说明。由于Wasm是二进制格式，因此这些文本指令将在编译文件中用字节码表示。</p>
 <p>让我们分析一个简单的函数：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(func $max (; 0 ;) (param $0 i32) (param $1 i32) (result i32)</span><br><span class="line">  (select</span><br><span class="line">   (get_local $0)</span><br><span class="line">   (get_local $1)</span><br><span class="line">   (i32.gt_s</span><br><span class="line">    (get_local $0)</span><br><span class="line">    (get_local $1)</span><br><span class="line">   )</span><br><span class="line">  )</span><br><span class="line"> )</span><br></pre></td></tr></table></figure>
