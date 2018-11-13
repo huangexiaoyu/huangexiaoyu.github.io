@@ -6,15 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: WebAssembly | 欢歌笑语</title>
+  <title>CTF365的XSS挑战 | 欢歌笑语</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="欢歌笑语">
-<meta property="og:url" content="http://yoursite.com/tags/WebAssembly/index.html">
+  <meta name="description" content="对CTF365的XSS challenge进行记录">
+<meta name="keywords" content="CTF365,xss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF365的XSS挑战">
+<meta property="og:url" content="http://yoursite.com/2018/11/13/CTF365-XSS/index.html">
 <meta property="og:site_name" content="欢歌笑语">
+<meta property="og:description" content="对CTF365的XSS challenge进行记录">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest02.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest03.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest04.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest05.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest06.jpg">
+<meta property="og:updated_time" content="2018-11-13T13:08:22.567Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="欢歌笑语">
+<meta name="twitter:title" content="CTF365的XSS挑战">
+<meta name="twitter:description" content="对CTF365的XSS challenge进行记录">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest02.jpg">
   
     <link rel="alternative" href="/atom.xml" title="欢歌笑语" type="application/atom+xml">
   
@@ -154,64 +165,174 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-CTF365-XSS" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/11/12/translate01/" class="archive-article-date">
-  	<time datetime="2018-11-12T05:07:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-12</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/11/12/translate01/">WebAssembly的手动逆向</a>
+    <h1 class="article-title" itemprop="name">
+      CTF365的XSS挑战
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/11/13/CTF365-XSS/" class="archive-article-date">
+  	<time datetime="2018-11-13T09:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对CTF365的XSS challenge进行记录<br><a id="more"></a></p>
+<h1 id="第一关"><a href="#第一关" class="headerlink" title="第一关"></a>第一关</h1><p>用最简单的<code>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</code>测试，根据回显，发现过滤了<code>&lt;script&gt;</code>，并且把<code>script</code>替换成了<code>scr.pt</code></p>
+<p>改用另外的标签<code>&lt;img&gt;</code>,即<code>&lt;img src=x onerror=alert(1)&gt;</code></p>
+<p>测试通过！</p>
+<h1 id="第二关"><a href="#第二关" class="headerlink" title="第二关"></a>第二关</h1><p>和前一关一样，进行测试，发现增加了一些关键词的过滤，如<code>onerror</code> -&gt; <code>o.err</code> , <code>onclick</code>-&gt;<code>o.ick</code></p>
+<p>这两个都没有相似性，感觉应该是采用黑名单的过滤。</p>
+<p>测试<code>onmousemove</code>event,<code>&lt;img src=x onmousemove=alert(1)&gt;</code>,成功！</p>
+<p><img src="xsstest02.jpg" alt="xsstest02"></p>
+<h1 id="第三关"><a href="#第三关" class="headerlink" title="第三关"></a>第三关</h1><p>这一关感觉要比上一关简单啊。。。也是过滤，只不过是把这些全都过滤成空白字符串’’，所以把<code>onerror</code>插入<code>onerror</code>中，构成<code>ononerrorerror</code>，中间的<code>onerror</code>就被过滤成’’，留下<code>onerror</code></p>
+<p><code>&lt;img src=x ononerrormousemove=alert(1)&gt;</code></p>
+<p><img src="xsstest03.jpg" alt="xsstest03"></p>
+<h1 id="第四关"><a href="#第四关" class="headerlink" title="第四关"></a>第四关</h1><p>和之前的模式不同，这道题是要求输入post的url，然后会在下面显示出来。</p>
+<p>输入和输出如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http://&quot; ——&gt; &lt;a href=&quot;http://&quot; &quot;=&quot;&quot; alt=&quot;http://&quot;&gt;http://&quot;&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">不输入 ——&gt; &lt;a href=&quot;https://www.owasp.org/index.php/OWASP_Security_Shepherd&quot; alt=&quot;OWASP Security Shepherd&quot;&gt;https://www.owasp.org/index.php/OWASP_Security_Shepherd&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">http://&quot;alert(1) ——&gt; &lt;a href=&quot;http://&quot; alert&amp;#x28;1&amp;#x29;&quot;=&quot;&quot; alt=&quot;http://&quot;&gt;http://&quot;alert(1)&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>也就是说，过滤了特殊字符<code>&lt;</code> <code>&gt;</code> <code>&quot;</code>等，还过滤了on事件，并将on转换成unicode编码。</p>
+<p>在这里浪费了一些时间。。。其实应该很快就想到，过滤了小写，但是没有过滤大写啊！！</p>
+<p>payload：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http&quot;Onerror=alert(1)</span><br></pre></td></tr></table></figure></p>
+<p><img src="xsstest04.jpg" alt="xsstest04"></p>
+<h1 id="第五关"><a href="#第五关" class="headerlink" title="第五关"></a>第五关</h1><p>这一关过的稀里糊涂。。。和第四关差不多，多了一条是url必须是url的模样。</p>
+<p>先试了一下第四关的payload，发现出现了onerror还是被<code>&quot;&quot;</code>框起来了，于是就又加了一个<code>&quot;</code>,然后就成功了。</p>
+<p>payload：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:\\123.com&quot;&quot;onerror=alert(1)</span><br></pre></td></tr></table></figure></p>
+<p><img src="xsstest05.jpg" alt="xsstest05"></p>
+<h1 id="第六关"><a href="#第六关" class="headerlink" title="第六关"></a>第六关</h1><p>同样的payload，又过了这一关。。。</p>
+<p><img src="xsstest06.jpg" alt="xsstest06"></p>
+<h1 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h1><p>没想到CTF365的XSS还是对萌新很友好的</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">看雪翻译小组</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CTF365</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">WebAssembly</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">xss</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/11/13/CTF365-XSS/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/11/12/upload-file/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">文件上传漏洞</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -234,9 +355,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
