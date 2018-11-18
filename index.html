@@ -156,6 +156,250 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-HTML5-security" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/18/HTML5-security/">HTML5 安全</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/18/HTML5-security/" class="archive-article-date">
+  	<time datetime="2018-11-18T10:54:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="新标签"><a href="#新标签" class="headerlink" title="新标签"></a>新标签</h1><p>可用于XSS的新标签：<code>&lt;video&gt;</code>,<code>&lt;audio&gt;</code></p>
+<p>iframe的sandbox：使用后，<code>&lt;iframe&gt;</code>标签加载的内容将被视为一个独立的源（同源策略的源），其中的脚本将被禁止执行，表单被禁止提交，插件被禁止加载，指向其他浏览对象的链接也会被禁止。该标签可以用参数来实现更精确的控制。</p>
+<p><code>&lt;a&gt;</code>标签的新属性：noreferrer</p>
+<p><code>&lt;CANVAS&gt;</code>标签</p>
+<p>实现跨域请求</p>
+<p>postMessage:跨窗口传递消息</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">HTML5</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/18/HTML5-security/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CSRF-info" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/18/CSRF-info/">CSRF--《白帽子讲web安全》</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/18/CSRF-info/" class="archive-article-date">
+  	<time datetime="2018-11-18T10:21:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>CSRF：Cross Site Request Forgery，跨站请求伪造，伪造请求，诱导用户点击</p>
+<p>Third-party cookie：服务器在set-cookie时指定了Expire时间，只有到时间后cookie才会失效，如果浏览器从一个域的页面中要加载另一个域的资源，出于安全原因，某些浏览器会阻止third-party cookie的发送。这种cookie保存在本地。<br>session cookie：没有指定Expire时间，浏览器关闭后，即失效，保存在浏览器进程的内存空间中。</p>
+<p>P3P头</p>
+<h1 id="GET和POST问题"><a href="#GET和POST问题" class="headerlink" title="GET和POST问题"></a>GET和POST问题</h1><p>就一些表单来说，因为没有严格的区分GET和POST，所以可以用GET来请求。（比如php里的REQUEST方法可以用GET绕过）</p>
+<p>也可以通过JS自动提交</p>
+<h1 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h1><p>验证码</p>
+<p>不利于用户体验</p>
+<p>Referer Check</p>
+<p>Token：一致使用，不可预测性原则，对同时存在XSS的网站失效</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">CSRF</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">《白帽子讲web安全》</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/18/CSRF-info/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-PRET-tool" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/14/PRET-tool/">PRET tool</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/14/PRET-tool/" class="archive-article-date">
+  	<time datetime="2018-11-14T10:34:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="PRET简介"><a href="#PRET简介" class="headerlink" title="PRET简介"></a>PRET简介</h1><p>各种printer命令的集合，包括<code>pjl</code>，<code>pcl</code>，<code>ps</code>等，可以根据需要测试该命令是否存在于某台打印机。</p>
+<p>github链接：<a href="https://github.com/RUB-NDS/PRET" target="_blank" rel="noopener">https://github.com/RUB-NDS/PRET</a><br>论文（2017年IEEE）：<a href="http://www.ieee-security.org/TC/SP2017/papers/64.pdf" target="_blank" rel="noopener">http://www.ieee-security.org/TC/SP2017/papers/64.pdf</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">printer</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tool</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/14/PRET-tool/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CTF365-XSS" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -624,6 +868,26 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CSRF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">《白帽子讲web安全》</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">HTML5</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">printer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">tool</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CTF365</a>

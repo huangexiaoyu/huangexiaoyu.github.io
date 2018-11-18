@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: CTF365 | 欢歌笑语</title>
+  <title>CSRF--《白帽子讲web安全》 | 欢歌笑语</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="欢歌笑语">
-<meta property="og:url" content="http://yoursite.com/tags/CTF365/index.html">
+  <meta name="description" content="简介CSRF：Cross Site Request Forgery，跨站请求伪造，伪造请求，诱导用户点击 Third-party cookie：服务器在set-cookie时指定了Expire时间，只有到时间后cookie才会失效，如果浏览器从一个域的页面中要加载另一个域的资源，出于安全原因，某些浏览器会阻止third-party cookie的发送。这种cookie保存在本地。session c">
+<meta name="keywords" content="CSRF,《白帽子讲web安全》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSRF--《白帽子讲web安全》">
+<meta property="og:url" content="http://yoursite.com/2018/11/18/CSRF-info/index.html">
 <meta property="og:site_name" content="欢歌笑语">
+<meta property="og:description" content="简介CSRF：Cross Site Request Forgery，跨站请求伪造，伪造请求，诱导用户点击 Third-party cookie：服务器在set-cookie时指定了Expire时间，只有到时间后cookie才会失效，如果浏览器从一个域的页面中要加载另一个域的资源，出于安全原因，某些浏览器会阻止third-party cookie的发送。这种cookie保存在本地。session c">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-18T10:54:35.386Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="欢歌笑语">
+<meta name="twitter:title" content="CSRF--《白帽子讲web安全》">
+<meta name="twitter:description" content="简介CSRF：Cross Site Request Forgery，跨站请求伪造，伪造请求，诱导用户点击 Third-party cookie：服务器在set-cookie时指定了Expire时间，只有到时间后cookie才会失效，如果浏览器从一个域的页面中要加载另一个域的资源，出于安全原因，某些浏览器会阻止third-party cookie的发送。这种cookie保存在本地。session c">
   
     <link rel="alternative" href="/atom.xml" title="欢歌笑语" type="application/atom+xml">
   
@@ -154,64 +159,167 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-CSRF-info" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/11/13/CTF365-XSS/" class="archive-article-date">
-  	<time datetime="2018-11-13T09:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-13</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/11/13/CTF365-XSS/">CTF365的XSS挑战</a>
+    <h1 class="article-title" itemprop="name">
+      CSRF--《白帽子讲web安全》
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/11/18/CSRF-info/" class="archive-article-date">
+  	<time datetime="2018-11-18T10:21:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>CSRF：Cross Site Request Forgery，跨站请求伪造，伪造请求，诱导用户点击</p>
+<p>Third-party cookie：服务器在set-cookie时指定了Expire时间，只有到时间后cookie才会失效，如果浏览器从一个域的页面中要加载另一个域的资源，出于安全原因，某些浏览器会阻止third-party cookie的发送。这种cookie保存在本地。<br>session cookie：没有指定Expire时间，浏览器关闭后，即失效，保存在浏览器进程的内存空间中。</p>
+<p>P3P头</p>
+<h1 id="GET和POST问题"><a href="#GET和POST问题" class="headerlink" title="GET和POST问题"></a>GET和POST问题</h1><p>就一些表单来说，因为没有严格的区分GET和POST，所以可以用GET来请求。（比如php里的REQUEST方法可以用GET绕过）</p>
+<p>也可以通过JS自动提交</p>
+<h1 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h1><p>验证码</p>
+<p>不利于用户体验</p>
+<p>Referer Check</p>
+<p>Token：一致使用，不可预测性原则，对同时存在XSS的网站失效</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CTF365</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">CSRF</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">xss</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">《白帽子讲web安全》</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/11/18/CSRF-info/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2018/11/18/HTML5-security/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          HTML5 安全
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2018/11/14/PRET-tool/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">PRET tool</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -234,9 +342,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
