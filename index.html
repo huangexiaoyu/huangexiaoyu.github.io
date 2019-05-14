@@ -328,7 +328,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/14/ML-1-md/">ML-1.md</a>
+      <a class="article-title" href="/2018/12/14/ML-1-md/">人工智能基础</a>
     </h1>
   
 
@@ -341,44 +341,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="数据预处理方法："><a href="#数据预处理方法：" class="headerlink" title="数据预处理方法："></a>数据预处理方法：</h1><p>极差规范化、标准差规范化、异常值的判断和处理（+缺失值）</p>
-<p>分类特征问题：one-hot一位有效编码</p>
-<h1 id="K-Fold-Cross-Validation："><a href="#K-Fold-Cross-Validation：" class="headerlink" title="K-Fold Cross Validation："></a>K-Fold Cross Validation：</h1><p>直接分割训练集和验证集：优缺点</p>
-<p>LOOCV方法：每次选取一个数据作为训练集</p>
-<h1 id="OverFitting过拟合："><a href="#OverFitting过拟合：" class="headerlink" title="OverFitting过拟合："></a>OverFitting过拟合：</h1><p>规避：数据集扩充、改进模型（early stop 精度不改变时即时停止，正则化）</p>
-<h1 id="SVM：支持向量机"><a href="#SVM：支持向量机" class="headerlink" title="SVM：支持向量机"></a>SVM：支持向量机</h1><p>分离样本：离分割超平面最近的点就是支持向量</p>
-<p>分类问题，线性不可分（解决：升维，寻找核函数）</p>
-<h1 id="线性回归："><a href="#线性回归：" class="headerlink" title="线性回归："></a>线性回归：</h1><p>线性+回归</p>
-<p>MSE</p>
-<h1 id="工具："><a href="#工具：" class="headerlink" title="工具："></a>工具：</h1><p>scikit python python的第三方库，有线性回归的专门模块</p>
-<p>tensorflow 难度大，论文少</p>
-<p>pyTorch</p>
-<p>Keras</p>
-<p>平台：sklearn.apachecn.org</p>
-<p>竞赛平台：<a href="http://www.kaggle.com" target="_blank" rel="noopener">www.kaggle.com</a></p>
-<h1 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h1><p>目标：得到分类函数，使各点到该线的距离之和最大</p>
-<p>kNN：可以判断“不是”，可以作为过滤海量数据的第一步</p>
-<p>adaboosting</p>
-<p>#决策树</p>
-<p>特征–二叉多叉</p>
-<p>信息增益？  偏向于取值教多<br>CART剪枝</p>
-<p>用处：<br>数据分析–直观<br>攻击方式？</p>
-<h1 id="集成学习"><a href="#集成学习" class="headerlink" title="集成学习"></a>集成学习</h1><p>同质个体学习器</p>
-<p>结合策略：投票、学习法</p>
-<p>停靠域名？？–清华的论文的算法—-</p>
-<h1 id="贝叶斯"><a href="#贝叶斯" class="headerlink" title="贝叶斯"></a>贝叶斯</h1><p>包括：朴素贝叶斯公式、<br>缺点：对不相关的属性不敏感<br>应用：中文分词、统计机器翻译、垃圾邮件过滤</p>
-<p>需要语料库</p>
-<h1 id="马尔可夫"><a href="#马尔可夫" class="headerlink" title="马尔可夫"></a>马尔可夫</h1><p>模型：<br>时间角度：<br>马尔可夫链：显式，此刻状态只与上一状态有关（稳定状态与初始状态无关），收敛性质，用于pagerank算法<br>隐式马尔可夫模型HMM：隐式，含有未知参数，<br>马尔可夫决策：<br>部分可观察的：</p>
-<p>空间角度：<br>条件随机场：由于样本较少</p>
-<p>马尔可夫链—-用于fuzz寻找未知路径，迭代后概率最低的点作为新的种子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">```安全领域的应用，为什么用，怎么用（重点是应用问题），感性认识，讲所有涉及到的论文</span><br></pre></td></tr></table></figure>
-<h1 id="图核方法"><a href="#图核方法" class="headerlink" title="图核方法"></a>图核方法</h1><p>图同构：用图同构的方法去做图的相似性比较是np问题<br>图编辑：通过图的编辑（剪枝，加边）判断相似性问题<br>拓扑描述符：图抽象成矩阵——拓扑信息的丢失<br>图核：构建方法？<br>1.R卷积图核：基于图分解(分解成子图)+子图的同构(如何计算？)<br>2.subtree kernel：顶点的hash值——BOP问题</p>
-<h1 id="Graph-Mining-Graph-pattern-mining：pattern有没有含义？"><a href="#Graph-Mining-Graph-pattern-mining：pattern有没有含义？" class="headerlink" title="Graph Mining = Graph pattern mining：pattern有没有含义？"></a>Graph Mining = Graph pattern mining：pattern有没有含义？</h1><h2 id="Aprioi-算法"><a href="#Aprioi-算法" class="headerlink" title="Aprioi 算法"></a>Aprioi 算法</h2><p>通过不断寻找遍历频繁子图，拿到pattern</p>
-<p>存在路径爆炸问题，需要选择优化算法</p>
-<h2 id="找到frequent的子图：frequent-pattern-baesd-mining-framework"><a href="#找到frequent的子图：frequent-pattern-baesd-mining-framework" class="headerlink" title="找到frequent的子图：frequent pattern baesd mining framework"></a>找到frequent的子图：frequent pattern baesd mining framework</h2><p>可以用pattern进行图压缩，将图中的每一个pattern变成一个向量</p>
-<h2 id="恶意软件分发过程"><a href="#恶意软件分发过程" class="headerlink" title="恶意软件分发过程"></a>恶意软件分发过程</h2><p>分析恶意软件分发的时间点，抽象成二步图，找到密度最大的子图</p>
-<p>#knowledge base</p>
-
+        <p>人工智能与安全讨论班，第一期（中间几期我听不懂了。。。）等忙完了把我讲的ppt整理一下</p>
+        
+          <a class="article-more-a" href="/2018/12/14/ML-1-md/#more">more >></a>
+        
       
 
       
@@ -573,11 +539,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">firmware</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">firmware</a>
         		</li>
       		
 		</ul>
@@ -653,11 +619,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">exploit</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">exploit</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
         		</li>
       		
 		</ul>
@@ -1159,14 +1125,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">red team</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">CTF365</a>
               </li>
              
@@ -1175,11 +1133,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">printer</a>
+                <a href="javascript:void(0)" class="js-tag color4">red team</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tool</a>
+                <a href="javascript:void(0)" class="js-tag color3">ML</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1191,7 +1149,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">firmware</a>
+                <a href="javascript:void(0)" class="js-tag color3">printer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">tool</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">exploit</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1199,7 +1165,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">exploit</a>
+                <a href="javascript:void(0)" class="js-tag color4">firmware</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">PRET</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1216,10 +1186,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">cyber red teaming</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">PRET</a>
               </li>
             
             <div class="clearfix"></div>
