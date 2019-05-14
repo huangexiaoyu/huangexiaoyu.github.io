@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>文件上传漏洞 | 欢歌笑语</title>
+  <title>Hacker play book chapter 1 | 欢歌笑语</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="漏洞成因0.在客户端用javascript或flash验证用户上传的文件格式，但上传到服务器后没验证。1.对用户上传的文件只检查了ContentType，但ContentType是可以被用户修改的，所以用户上传的脚本文件可以将ContentType改成image/gif来绕过检查。2.黑名单机制。检查用户上传的文件的后缀，如果是处于黑名单中的后缀，就返回错误信息。但黑名单机制很不好，不够完善，当黑">
-<meta name="keywords" content="FileUpload">
+  <meta name="description" content="红队测试-1 准备阶段">
+<meta name="keywords" content="CTF365,xss">
 <meta property="og:type" content="article">
-<meta property="og:title" content="文件上传漏洞">
-<meta property="og:url" content="http://yoursite.com/2018/11/12/upload-file/index.html">
+<meta property="og:title" content="Hacker play book chapter 1">
+<meta property="og:url" content="http://yoursite.com/2018/11/13/red-team-chatper1/index.html">
 <meta property="og:site_name" content="欢歌笑语">
-<meta property="og:description" content="漏洞成因0.在客户端用javascript或flash验证用户上传的文件格式，但上传到服务器后没验证。1.对用户上传的文件只检查了ContentType，但ContentType是可以被用户修改的，所以用户上传的脚本文件可以将ContentType改成image/gif来绕过检查。2.黑名单机制。检查用户上传的文件的后缀，如果是处于黑名单中的后缀，就返回错误信息。但黑名单机制很不好，不够完善，当黑">
+<meta property="og:description" content="红队测试-1 准备阶段">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-11-12T10:23:06.256Z">
+<meta property="og:updated_time" content="2019-05-14T06:56:09.887Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="文件上传漏洞">
-<meta name="twitter:description" content="漏洞成因0.在客户端用javascript或flash验证用户上传的文件格式，但上传到服务器后没验证。1.对用户上传的文件只检查了ContentType，但ContentType是可以被用户修改的，所以用户上传的脚本文件可以将ContentType改成image/gif来绕过检查。2.黑名单机制。检查用户上传的文件的后缀，如果是处于黑名单中的后缀，就返回错误信息。但黑名单机制很不好，不够完善，当黑">
+<meta name="twitter:title" content="Hacker play book chapter 1">
+<meta name="twitter:description" content="红队测试-1 准备阶段">
   
     <link rel="alternative" href="/atom.xml" title="欢歌笑语" type="application/atom+xml">
   
@@ -159,27 +159,32 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-upload-file" class="article article-type-post " itemscope="" itemprop="blogPost">
+            <article id="post-red-team-chatper1" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      文件上传漏洞
+      Hacker play book chapter 1
     </h1>
   
 
         
-        <a href="/2018/11/12/upload-file/" class="archive-article-date">
-  	<time datetime="2018-11-12T10:21:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-12</time>
+        <a href="/2018/11/13/red-team-chatper1/" class="archive-article-date">
+  	<time datetime="2018-11-13T09:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h2><p>0.在客户端用javascript或flash验证用户上传的文件格式，但上传到服务器后没验证。<br>1.对用户上传的文件只检查了ContentType，但ContentType是可以被用户修改的，所以用户上传的脚本文件可以将ContentType改成image/gif来绕过检查。<br>2.黑名单机制。检查用户上传的文件的后缀，如果是处于黑名单中的后缀，就返回错误信息。但黑名单机制很不好，不够完善，当黑名单中有遗漏的时候，攻击者就能够生虚而入。<br>3.没有对用户上传的文件改名。网站有时候检查了用户上传的文件后缀是.jpg或.gif，于是就上传成功了，不对上传的文件进行改名。但一旦服务器存在解析漏洞，攻击者就可以利用畸形文件名来上传恶意代码。比如IIS6.0的解析漏洞，攻击者即可上传文件名类似“muma.asp;.gif”的文件，虽然看起来是一个gif格式，但IIS6.0就会把它解析成asp脚本运行。<br>4.解压缩功能造成问题。有些网站有这样的功能，比如wordpress和emlog后台支持上传压缩包（上传后自动解压），这样我们把恶意代码写在压缩包中某文件里，就能在上传解压后被运行。</p>
+        <p>红队测试-1 准备阶段<br><a id="more"></a></p>
+<p>请记住,作为一个红队成员,我们的目的不是破坏环境(虽然这是最有趣的),而是要复制现实世界的攻击,以查看客户是否受到保护,并可以在很短的时间内检测到攻击。</p>
+<h1 id="选择攻击工具"><a href="#选择攻击工具" class="headerlink" title="选择攻击工具"></a>选择攻击工具</h1><h2 id="The-PenTesters-Framework-PTF"><a href="#The-PenTesters-Framework-PTF" class="headerlink" title="The PenTesters Framework (PTF)"></a>The PenTesters Framework (PTF)</h2><p>一个python编写的渗透测试工具合集的框架</p>
+<h2 id="Windows-att-amp-ck各阶段使用工具的解释"><a href="#Windows-att-amp-ck各阶段使用工具的解释" class="headerlink" title="Windows att&amp;ck各阶段使用工具的解释"></a>Windows att&amp;ck各阶段使用工具的解释</h2><p><a href="https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/windows-index.md" target="_blank" rel="noopener">https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/windows-index.md</a></p>
+<h2 id="Metasploit-框架"><a href="#Metasploit-框架" class="headerlink" title="Metasploit 框架"></a>Metasploit 框架</h2><h2 id="Cobalt-Strike"><a href="#Cobalt-Strike" class="headerlink" title="Cobalt Strike"></a>Cobalt Strike</h2><p>本书最推荐的是这个工具</p>
+<h2 id="dnscat2"><a href="#dnscat2" class="headerlink" title="dnscat2"></a>dnscat2</h2><p>利用DNS服务进行流量隐藏</p>
 
       
 
@@ -193,7 +198,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">FileUpload</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CTF365</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">xss</a>
         		</li>
       		
 		</ul>
@@ -249,7 +258,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/11/12/upload-file/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/11/13/red-team-chatper1/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -263,18 +272,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/11/13/CTF365-XSS/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/11/14/PRET-tool/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          CTF365的XSS挑战
+          PRET tool
         
       </div>
     </a>
   
   
-    <a href="/2018/11/12/xss-exploit/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">XSS技巧总结(慢慢扩充)</div>
+    <a href="/2018/11/13/CTF365-XSS/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">CTF365的XSS挑战</div>
       <i class="icon-circle-right"></i>
     </a>
   

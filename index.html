@@ -179,95 +179,9 @@
         <p>CRT练习通过搜索可行的攻击计划[1]来确定影响某个网络系统的漏洞，并检查其对系统的影响。</p>
 <p>自动规划人员有三大类：状态空间规划人员，规划图规划人员和基于分层任务网络的规划人员。我们发现使用规划图的算法和工具目前最适合防御网络环境，因为它们可以在更大的情况下更好地扩展计算，并在合理的时间内生成更长的攻击计划。</p>
 <p>特别是，基于投资组合的规划（PbP）是一个利用规划技术库并为每个问题学习合适的投资组合配置的并行计算框架，已被证明是一种有前景的现成规划工具。我们得出结论，未来的CRT练习应该考虑试用PbP。</p>
-<h1 id="建模"><a href="#建模" class="headerlink" title="建模"></a>建模</h1><p>世界模型中有哪些实体？这可能包括计算机，用户，软件，路由器，加密存储，网络策略等。<br>•实体之间有什么关系？示例包括 “用户A在计算机B上有帐户”和“计算机X安装了软件Y”。<br>•世界的动态是什么？某些系统行为独立于对手的行为而发生。<br>•世界哪些部分相关？最好有简洁的系统表示，与对手的目标相关，以减少不必要的探索[7]。<br>•世界哪些地方可见？并非系统的所有方面，即使是那些相关的方面，也可能对对手可见，甚至来自系统的另一部分。</p>
-<h1 id="攻击计划生成"><a href="#攻击计划生成" class="headerlink" title="攻击计划生成"></a>攻击计划生成</h1><p>红队（扮演对手角色的运动员）选择首先使用以下一个或多个因素尝试哪些攻击：</p>
-<p>•基于问题：优先考虑最关注的攻击（对组织而言）<br>•基于成功：优先考虑最有可能成功的攻击<br>•基于成本：优先考虑消耗最少资源的攻击<br>•基于影响：优先考虑成功时最具破坏性的攻击<br>•基于机会：优先考虑与某些情况相关的攻击<br>•基于验证：优先处理以前处理过的攻击。这可能是为了验证已经实施的保护/对策是否按预期工作。</p>
-<h1 id="规划域特征"><a href="#规划域特征" class="headerlink" title="规划域特征"></a>规划域特征</h1><p>•可观察性：如果计划者知道其当前状态的每个对象和介词，则系统是完全可观察的。否则，它被认为只是部分可观察到的。在CRT中，这种可观察性涉及从对手的角度看网络环境的可见性。<br>•决定论：代理人行动对国家的影响是否可预测？<br>•动态：系统状态是否独立于代理操作/计划执行而变化？<br>•时间性：完成行动所需的时间是否重要？<br>•粒度：行动决策，影响和成本是离散的还是连续的？ </p>
-<p>状态空间规划将规划问题建模为有向图，其中节点表示系统可能处于的状态，而弧（边）是将系统从一个状态移动到另一个状态的动作。一旦构建了图形，它就成为生成计划的寻路问题。</p>
-<p>规划图是一种数据结构，它通过跟踪互斥量来捕获系统可能处于的可能和不可能状态集：成对的观察结果不能同时为真[36]。例如，航空公司系统可以处于其两架飞机在同一机场的状态，但不能处于一架飞机同时在两个不同机场的状态。<br>结构化为定向分层图，规划图中的节点可以是动作或命题节点，分别属于动作或命题层。图形从初始状态开始增长，并根据动作库扩展到下一层。<br>动作层表示可以在给定步骤采取的全部可能动作，而命题层表示在采取任何动作之后系统可以处于的状态集。弧表示动作和命题节点之间的动作效果或预处理动作关系。 —-该模型对问题求解的覆盖率最高</p>
-<p>分层任务网络是另一种在应用自动规划中流行的数据结构。与由状态之间的关系驱动的计划图不同，HTN由行为之间的关系驱动。HTN不是试图通过图搜索达到目标状态，而是将规划问题视为试图执行可以分解为较小任务的任务，其中原子级别的子任务称为“原始任务”或“运算符”。 与仅需要对基本运算符进行编码的状态空间规划和规划图不同，HTN需要域专家来确定和编码HTN规划人员可以使用的任务结构。这样做可以避免许多死胡同计划。</p>
-<p>使用HTN进行规划是迄今为止在工业应用方面最受欢迎的技术，已被用于机器人技术，NPC脚本用于计算机游戏，制造，物流和调度。HTN已经在国防背景下用于CRT </p>
-<h1 id="ai的应用"><a href="#ai的应用" class="headerlink" title="ai的应用"></a>ai的应用</h1><p>政策学习是关于识别潜在冲突的命题（如规划图中的互斥体），以及开发特定于问题的搜索策略以减少死胡同。<br>参数调整是针对特定问题或问题类与搜索启发式相关联的权重和不变量的优化。<br>宏观行动学习侧重于发现和维护一个有用的计划结构库（部分计划），可以帮助解决特定领域中更大，更难的计划问题。<br>投资组合构建是一种集成学习形式：使用多种算法来解决当前问题，并预测类似问题的未来算法成功。</p>
-<p>机器学习带来一些成本，最显着的是培训方面。为了获得最大效果，培训集必须代表将遇到的规划问题。如果此培训无法提前，那么规划人员必须能够继续学习。 </p>
-<h1 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h1><p>规划空间规划是一种类似于状态空间规划的图遍历方法。节点表示部分计划而不是系统状态，而弧表示计划细化操作，例如从计划中添加或删除操作。该算法通常从包含缺陷的初始计划开始，目标是通过缺陷消除进行计划细化。</p>
-<p>SAT规划：将规划问题编码为布尔可满足性问题，然后使用随机局部搜索算法对其进行求解。—-不适用于动态系统</p>
-<p>马尔科夫决策过程（MDP）是用于表示在将效应是非确定性规划域动作的数学结构。求解MDP的输出是包含基于先前动作的观察效果的条件动作的部分订单计划。目前正在研究解决部分可观测MDP（POMDP）在渗透测试中的高级应用，但解决MDP已被证明是难以处理的。</p>
-<h1 id="auto-cyber-red-team"><a href="#auto-cyber-red-team" class="headerlink" title="auto cyber red team"></a>auto cyber red team</h1><p>抽象：<br>可观察性：如果将域视为完全可观察的系统，则自动CRT可能更简单，因此构建攻击计划可能需要的所有内容都是已知且可用的。完全可观察系统上的CRT不仅可以产生更完整的攻击计划，还可以将规划工作与攻击计划成本，风险和影响分析的分析分离</p>
-<p>每一步的成功率：建议对手采取的每一个行动都是确定性的，并且总是成功的。这种假设允许使用更多的规划技术，因为只有MDP目前才能有效地解决非确定性规划问题。此外，在CRT中假阳性比假阴性更好。</p>
-<p>系统的动态变化：由于很难对攻击结果的非确定性进行建模[55]，因此很难对系统动力学进行建模。因此，在单个计划运行的上下文中，假设建议使用静态环境。</p>
-<p>时间和资源限制：为了将CRT练习编码为规划问题，建议这些资源约束不是攻击者计划有效性的一个因素。受约束的攻击计划的质量和有效性可以在找到后快速检查，存档和排名。</p>
-<p>最优性和排序：对于初始开发，我们更关心攻击可能性和影响而不是攻击效率，因此我们不需要计划员来生成或保证最佳计划。只要它在合理的时间内生成有效的攻击计划，并且计划是完全有序的，如果后来针对相同的问题引入或建模非确定性，则可以将意外事件附加到这些计划上。</p>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><p>我们将CRT域作为经典规划问题进行了表征和抽象。根据计划器能力表中的信息以及第3节的IPC结果，具有<em>参数调整或基于组合的学习的计划图规划器</em>似乎是CRT练习计划和执行的最合适工具。</p>
-<p>LAMA—-快速部署<br>FD-Autotune<br>PbP2—-更有长远价值</p>
-<p>我们的建议是规划图表规划器是CRT最合适的方法，特别是对于敏感系统的实时部署，因为它具有可扩展的性能和可测量的成功率。此外，如果CRT需要经常进行，那么结合机器学习的计划实施将会更好。我们推荐用于试验的工具是LAMA，FD-Autotune和PbP2，因为它们的性能远远高于同行。</p>
-<p>从这里开始，有两个步骤。第一种方法是使用这些工具之一在大型组织的计算环境中建立和执行CRT，以便与传统的CRT实践方法相比，验证并更准确地衡量它们带来的好处。另一步是为组织CRT确定专门的规划工具，并研究其能力和绩效。</p>
-<p>在人工智能领域中,对决策类问题的求解过程也可以称为规划。经典规划一般基于确定式的环境模式,如搜索算法等。这类方法在现实应用中有很大的<br>局限性。面对现实中的规划问题,主体对环境特性的把握常常是不完整的,正是由于这种知识的缺失,造成了不确定性。马尔可夫决策模型则可以处理这类问题。</p>
-<h1 id="论文：2015-Hoffmann————Simulated-Penetration-Testing：From-“Dijkstra”-to-“Turing-Test-”"><a href="#论文：2015-Hoffmann————Simulated-Penetration-Testing：From-“Dijkstra”-to-“Turing-Test-”" class="headerlink" title="论文：2015-Hoffmann————Simulated Penetration Testing：From “Dijkstra” to “Turing Test++”"></a>论文：2015-Hoffmann————Simulated Penetration Testing：From “Dijkstra” to “Turing Test++”</h1><p>目标：真正模拟黑客行为，设计一个系统模型，利用基于模型的攻击规划生成攻击，而非执行</p>
-<p>该工具引导人类安全官员的注意力，指出在一个巨大的系统中，最关键的安全问题可能存在于何处。<br>要点：精确性<br>但是：社工行为中可能会出现经典图灵测试的情况，还有很多需要考虑的情况<br>两个维度：<br>(A)如何处理来自攻击者观点的不确定性：POMDP<br>(B)单个攻击组件之间的交互程度。</p>
-<h2 id="The-Core-Security-model：Lucangeli-Sarraute-and-Richarte-2010"><a href="#The-Core-Security-model：Lucangeli-Sarraute-and-Richarte-2010" class="headerlink" title="The Core Security model：Lucangeli, Sarraute, and Richarte 2010"></a>The Core Security model：Lucangeli, Sarraute, and Richarte 2010</h2><p>核心安全性的应用程序设计的详细描述超出了范围(并且会违反机密性)。但是核心规划模型本身已经发布(Lucangeli, Sarraute, and Richarte 2010)，并且很容易解释。今后我们将把这个模型称为CoreSec-Classical。</p>
-<p>该模型的假设前提：<br>1.已知网络图：没有不确定性<br>2.已知主机设置<br>3.静态网络：在PDDL init state中给出<br>4.单调行为：把攻击看作是资产的积累，因此不存在删除操作<br>5.action = hop</p>
-<h2 id="POMDP模型"><a href="#POMDP模型" class="headerlink" title="POMDP模型"></a>POMDP模型</h2><p>将攻击者对网络的不完全了解建模为状态的不确定性</p>
-<p>初始概率分布对攻击之前的知识进行编码，并且在攻击执行期间的观察(从显式感知动作和观察动作结果)将这些知识细化。</p>
-<p>创建CoreSec-POMDP模型————假设：<br>1.network graph已知<br>2.action = hop<br>3.不会已知主机设置</p>
-<p>不确定性：<br>1.成功或失败<br>2.action的成功或失败取决于主机设置</p>
-<p>状态 s 描述网络配置，以及攻击的状态。<br>该模型仍然只关注网络中主机之间的跳转。</p>
-<p>b0是如何获取的？？</p>
-<h2 id="MDP"><a href="#MDP" class="headerlink" title="MDP"></a>MDP</h2><h2 id="攻击图和其他模型"><a href="#攻击图和其他模型" class="headerlink" title="攻击图和其他模型"></a>攻击图和其他模型</h2><p>攻击图：攻击被分解为原子组件，通常称为动作，由连接的前置条件和后置条件描述受攻击系统的相关属性。</p>
-<p>攻击图表示通过可能的行动组合产生的某种形式的威胁分析，即，给出这些动作的可达性。这和条形规划一样，只是许多工作的目的不是为了找到一个攻击计划，而是为了概述所有可能的(或最相关的)攻击计划，以供人类安全官员考虑。</p>
-<p>预期的目标成本也有缺点。设置放弃成本类似于设置目标奖励，会导致相同的建模困难。虽然这可以通过对终端的不同处理来避免(例如Kolobov, Mausam,andWeld2012;Teichteil-K onigsbuch2012)，但无论如何，预期目标成本(expected cost-to-goal)并不清楚攻击者达到关键数据的最低预期成本是多少?是安全团队最感兴趣的问题。一种更自然的方法似乎是通过不同的成本预算来描述不同类型的攻击者，并在给定预算的情况下最大化目标概率。</p>
-<p>A state is a dead end iff there is no determinized plan. </p>
-<p>系统/漏洞覆盖率可能是整个待测过程的一个合适的元标准。</p>
-<p>安全官员最终想要的是一份形势报告，概述过去和当前最相关的威胁，以及过去和可能的应对措施。</p>
-<p>算法和模型都面临着挑战，尤其是在特殊情况下的问题结构的开发，尤其是在形式主义子类的识别，以及设计的实用性和准确性的概率分布。</p>
-<h1 id="论文：2016——对工业系统的自动化渗透测试"><a href="#论文：2016——对工业系统的自动化渗透测试" class="headerlink" title="论文：2016——对工业系统的自动化渗透测试"></a>论文：2016——对工业系统的自动化渗透测试</h1><p>在本工作中，我们采用了更现实的灰盒测试，它模拟了一个对目标系统有部分了解的内部攻击者。</p>
-<p>首先，我们假设攻击者拥有完整的网络布局知识。其次，我们假设攻击者拥有关于网络中节点的静态配置的基本信息，例如节点是否以前被攻击过等等。第三，我们假设以前受损的资产不会丢失，并且操作不会有任何意外的副作用，例如应用一个爆炸程序导致机器崩溃。</p>
-<p>为了计算利用给定节点的成本，我们采用贝叶斯方法，根据从常见漏洞数据库中获取的信息，不断更新我们最初/先前对利用节点的信念。为了提出先验信念，我们使用扫描工具，例如NMAP和关于识别系统可利用性的统计信息。针对漏洞爆发的可能性，我们参考了国家漏洞数据库(NVD)等漏洞数据库。</p>
-<h1 id="论文：2018-模拟渗透测试—-POMDP"><a href="#论文：2018-模拟渗透测试—-POMDP" class="headerlink" title="论文：2018-模拟渗透测试—-POMDP"></a>论文：2018-模拟渗透测试—-POMDP</h1><p>在渗透测试（pentesting）中，网络管理员攻击自己的网络以识别和修复漏洞。基于计划的模拟测试可以实现比手动测试更高的测试覆盖率。一个关键的挑战是攻击计划尽可能忠实地模仿人类黑客。为此提出了<code>POMDP模型</code>，但其计算难度很大，目前尚不清楚如何在实际中获取模型。另一方面，经典的规划模型具有可扩展性和易获取性，但完全忽略了黑客攻击的不完全知识特征。我们提出了一种新的中间立场，即在计算负担和模型获取工作中都是可行的，同时考虑到不完全知识的表示。我们设计了模型，展示了如何适应可用的解算器，以及如何从现实网络中获取模型。我们在现实网络上进行了实验，并表明我们的方法可扩展到实际的输入大小。 </p>
-<p>人工智能规划先前被建议作为进行测试的工具。特别地，我们探索了最复杂的案例——经典规划，攻击者知道整个网络结构和机器配置（Boddy等人2005年；Lucangeli、Sarraute和Richarte，2010年）；以及部分可观察到的马尔可夫决策过程（POMDP），其中机器配置最初不为攻击者所知，并且可以部分感知（Sarraute、Buffet和Hoffmann，2012年）。 </p>
-<p>标准的最大化模型在实际中是可评估的，它清楚地说明了如何量化网络中不同资产的重要性，以及如何捕获攻击者实用程序。人类发现了大量臭名昭著的硬骨头，不同的奖励选择可能会以复杂和不可预测的方式影响结果。最后，也是最重要的一点，POMDP模型需要一个精确的概率分布来满足初始信度的要求。输入测试，以及许多其他应用程序，都是不干净的或不负责任的。特别是，这涉及到为网络中的机器在可能的操作系统上识别一个精确的概率分布。先前的工作（Sarraute、Buffet和Hoffmann，2012年）仅仅设计了一个简单的“软件更新”模型，用于生成合成基准。同样，在最初信念的设计中所做的选择可能会对结果产生重大影响，妨碍了人类网络管理员分析的实际使用和附加价值。 </p>
-<p>在这一点上，我们提出了一个介于公共计划和POMDP之间的中间模型。我们将POMDP替换为部分可观察的或有计划，这是一个定性模型，其中概率分布被一组可能的配置或行动效果所取代，回报被目标导向行为所取代（例如（Weld、Anderson和Smith 1998；Hoffmann和Brafman 2005；Albore、Palacios和Geffner 2009））。特遣队计划者试图确定行动的计划树（或图），其中边缘由观察标记，所有树叶都达到目标状态。这种模型的解算器比POMDP解算器规模大得多，可用于更实用的网络。由于这些模型既不需要概率也不需要回报，因此我们避免了对它们的具体需求。</p>
-<p>偶然计划自然地模拟了一个攻击者，他最初对网络配置有定性的了解，并利用尝试的攻击结果以及明确的感知提高了攻击过程中的知识。与pomdps一样，与任何其他基于计划的渗透测试模型不同，偶然计划模型能够有意识地将漏洞利用和感知行为混合起来，类似于真正的攻击者。</p>
-<p>我们将我们的模型形式化为Hoffmann（2015）之前绘制的部分可观测加拿大黑客问题的定性变体。然后，我们根据已建立的条件规划PDDL提供一个具体的编码。我们展示了如何从网络扫描中获取这个模型。我们的模型的语义与标准的条件规划稍有不同，它处理无法解决的初始状态（目标机器无法访问的网络配置）。我们展示了如何调整可用的条件规划器来处理这个语义。</p>
-<p>我们对两个组织的真实网络进行了实验，在扫描这些网络时发现了真正的漏洞。我们证明了我们的特遣队计划者成功地计算了网络的计划。此外，我们还比较了从我们收集的实际网络数据中进行次采样的更小网络的临时计划与POMDP策略。结果表明，我们的方法确定的攻击策略质量较低但合理，比POMDP模型快很多数量级。</p>
-<h2 id="模型构建"><a href="#模型构建" class="headerlink" title="模型构建"></a>模型构建</h2><p>我们将网络建模为有向图，图的顶点是一组m个机器，边表示机器对之间的连接。与之前在该领域的工作一样，我们假设攻击者知道网络的结构。网络中的每台机器都可以有不同的配置，指定其硬件、操作系统、已安装的软件、已安装的更新、服务包等。网络配置是所有机器配置的结合。利用传感技术可以部分地揭示这种配置。例如，如果以精确的时间间隔将一系列4个TCP请求发送到目标计算机，则目标计算机的响应在不同版本的Windows之间会有所不同（Lyon 2009）。在许多情况下，一些成功的方法必须与操作系统结合起来。发送这些看似无辜的请求来识别机器的配置被称为“配置打印”。并不是所有的目标机器属性都可以识别。例如，可以确定某台机器运行Windows XP，但不能确定安装了哪个安全更新。</p>
-<p>我们说，如果攻击者可以在M机器上运行恶意软件，并且可以使用M机器查找打印并攻击其他机器，那么M机器是受控制的。许多配置都有漏洞，可以利用这些漏洞来控制机器，但这些漏洞在配置之间有所不同。因此，为了获得对机器的控制权，通常首先探测机器以识别某些配置属性，然后根据这些属性尝试几种适当的利用。由于攻击者无法完全观察配置，因此这些攻击可能会成功，使攻击者完全控制目标计算机，或者由于某些不可检测的配置属性（例如某些安全更新）使此攻击无效而失败。</p>
-<p>渗透测试（pentesting）的目标是控制网络中包含重要资产的某些机器。到达的机器M与受控机器相连。所有其他机器都无法到达。攻击者开始控制互联网，所有直接连接到互联网的机器都会被访问。</p>
-<h3 id="渗透测试模型"><a href="#渗透测试模型" class="headerlink" title="渗透测试模型"></a>渗透测试模型</h3><p>第一个也是最基本的观察是无限循环行为在测试中是没有用的。可以控制的机器数量是有限的，操作自然具有严格的正成本。在实践中，当攻击成功或攻击者决定放弃时，pentest停止。因此，将待定问题构造为一个随机最短路径(SSP)问题是很自然的。</p>
-<p>此外，正如Hoffmann(2015)所指出的，以下限制是可以理解的:<br>(i)利用漏洞的唯一影响是对目标机器的控制，而不是网络结构及其配置。<br>(ii)每次利用成功或者失败，失败是没有效果的。<br>(iii)每一项行动(利用和感应)的结果决定于网络配置。</p>
-<h3 id="POMDPs"><a href="#POMDPs" class="headerlink" title="POMDPs"></a>POMDPs</h3><p>部分可观测马尔可夫决策过程（POMDPS）（Sondik 1978）是部分可观测条件下概率规划的一个著名模型。pomdp是一个元组s、a、Ω、tr、o、r、b0，其中s是一组状态，a是一组动作，Ω是一组可能的观察结果。转移函数tr（s，a，s）提供了使用动作a从状态s过渡到状态s的概率。观察函数o（a，s，o）指定了执行动作a后观察到状态s的概率o∈Ω。奖励函数r（s，a，s）提供了执行到状态s的状态s中动作a的奖励；奖励可能是负的，与成本相对应。最后，b0是初始belief，状态的概率分布。</p>
-<p>我们不详细讨论POMDP（最优解、获得它们的方法），因为这与理解我们的贡献无关。因此，可以说，Tr和O诱导了一个超越信仰的过渡系统，解决方案是一个策略π将信仰映射到行动。有多种优化目标，其适用性取决于上下文。在Pentesting中，由于上述属性，假设一个终端状态是有意义的——通过实现目标或通过一个专门的放弃行动可以达到——并最大化给定π的预期未贴现奖励。</p>
-<p>Sarrautetal.（2012）介绍了Pentesting的pomdp模型。状态是网络的可能配置，包括网络结构和软件。利用行为在网络配置上具有先决条件，并且可能成功地实现对目标机器的控制；感知行为提供有关配置方面的信息。放弃行动总是让攻击以高成本终止。简而言之，Sarraute等人的模型是我们上面概述的内容的直接编码，特别是满足所讨论的特性。</p>
-<p>霍夫曼后来指出，鉴于(i) - (iii)， pentest与加拿大旅人问题密切相关(例如(Papadimitriou和Yannakakis 1991;Eyerich, Keller, and Helmert 2010))，他们的任务是穿越一张地图，地图上的各个道路连接可能被阻断。唯一的主要区别是，在pentesting中，处于一个位置的状态会被控制机器所取代，这样，旅行者就不会从一个位置移动到另一个位置，而是积累受控制的机器。因此，Hoffmann将加拿大黑客问题(Canadian Hacker Problem, CHP)作为一个抽象模型引入，特别是部分可观测的CHP (POCHP)。</p>
-<p>在pochp中，输入由一个带有起始节点n0和目标节点nt的图g组成，其中每个边都在配置命题c上用连接前提进行标记；利用动作尝试遍历边，同时感知动作观察其标签的元素；初始信念指定对真相的概率分布C的值分配。这个抽象模型自然地作为一个POMDP具体化、形式化的解决，事实上，Sarraute等人的模型就是这样做的。</p>
-<p>对于渗透测试，pomdp模型的一个主要缺点是需要获得初始信念分配，以及奖励和/或放弃行动的成本。当考虑定性模型时，这些差异是不相关的。</p>
-<h2 id="应急计划"><a href="#应急计划" class="headerlink" title="应急计划"></a>应急计划</h2><p>P<br>Aact<br>Asense<br>G</p>
-<h2 id="定性POCHP————-Q-POCHP"><a href="#定性POCHP————-Q-POCHP" class="headerlink" title="定性POCHP———— Q-POCHP"></a>定性POCHP———— Q-POCHP</h2><p>语法：</p>
-<p>节点：machines<br>边：两个machine之间可能的利用关系+连通性<br>C：machine configuration propositions————是节点和边都有的属性<br>Q-POCHP的一个实例是由节点N和边e的边标记有向图定义的。有一个起始节点n0，一组目标节点NT。任何一条边都可能是打开或close的，代理最初并不知道哪些边是打开的。<br>可以指定cost，但是在这里我们把它定成统一的。</p>
-<p>可观察的马尔可夫：<br>状态state：N，l，e，N指被控节点，e(N,N’)<br>我们假定攻击者不会立即看到攻击是否成功，但可以使用感知操作进行观察。因此，感知操作有两种类型:n’有没有被控、n’有没有属性o<br>belief是状态集<br>give-up action：</p>
-<p>语义定义：一个Q-POCHP是指解决belief{s0}的action树</p>
-<h2 id="PDDL模型"><a href="#PDDL模型" class="headerlink" title="PDDL模型"></a>PDDL模型</h2><p>(hacl ?src ?target)<br>(controlling ?m) ：所有被控主机<br>(HostOS ?m ?os) 、 (HostSW ?m ?sw)：m的os和software，这些特性最初是未知的，可以通过从受控制的邻近机器进行探测来感知<br>(Match ?os ?sw ?v)：给定的漏洞是否存在于给定的os-software组合中<br>(ExistVuln ?v ?m)：一个漏洞是否存在于一台机器。这些预测一开始是未知的，也不能被直接感知，模拟了无法探测所有信息的情况。<br>(hacl n n’)∧(ExistV uln v n’):n到n’之间是open的<br>action exploit：只有在计算机配置中可能存在漏洞时，控制计算机的攻击者才能尝试利用漏洞来控制相邻的计算机。只有在探测到可观察到的机器配置属性后，攻击者才能启动漏洞攻击操作。<br>action CheckControl：我们遵循Q-POCHP定义，攻击者不知道攻击是否成功。这是在exploit动作的条件effect中建模的，只有当漏洞存在时才实现控制。因此，在对机器m进行了一次利用之后，(control m)的值就变得未知了。我们添加一个检测动作来检查攻击者是否控制机器。<br>可能的初始状态集：用oneof表示<br>internet：n0</p>
-<p>我们使用析取来指定一个漏洞是否存在于一台机器上，从而允许一台机器具有多个漏洞。然而，存在的漏洞可能与该机器上的操作系统和软件不匹配，因此无法被利用。因此，攻击者不能对该漏洞发起攻击，除非存在其他的通用性，否则永远无法控制计算机。如前所述，这可能导致不可解的初始状态。</p>
-<h2 id="Q-POCHP模型构建：解决不可解决性"><a href="#Q-POCHP模型构建：解决不可解决性" class="headerlink" title="Q-POCHP模型构建：解决不可解决性"></a>Q-POCHP模型构建：解决不可解决性</h2><p>如前所述，Q-POCHP语义并不是立即可操作的，因为在上述具体模型的初始belief中，尚不清楚如何识别和紧凑地表示可解初始状态子集。我们处理这一问题时注意到，这种查验可以作为寻找应急计划的一部分。</p>
-<p>是否可解是静态的，不会被攻击者的动作改变</p>
-<p>还讲了两个定理</p>
-<h2 id="求解器"><a href="#求解器" class="headerlink" title="求解器"></a>求解器</h2><p>CPOR</p>
-<p>除了CPOR要求的数据结构外，我们的规划还维护Q-POHCP图的当前知识——edge集及其状态(打开、关闭或未知)，以及机器集及其属性。</p>
-<p>我们将CPOR启发式替换为在该图上计算的启发式。具体来说，我们使用Dijkstra算法（Dijkstra 1959）确定从受控机器到目标机器的最短路径，假设所有未知边都是开放的。让我成为这条道路上的第一台机器。我们现在集中注意力攻击M来控制它。</p>
-<p>给定针对m的一组可能的漏洞Vm(如初始信念中指定的)，我们识别Vm中最大数量的漏洞所需的属性(操作系统或软件)，并对其进行感知。在观察了该属性的值之后，如果Vm中有一个属性与机器已知属性匹配，我们将尝试利用它。否则，我们就会感知到另一种属性。</p>
-<p>一旦一个漏洞成功地控制了一台机器，我们就重新计算一条最短路径，并重复攻击机器的过程。如果我们未能控制m，也就是说，我们已经耗尽Vm中所有可能的漏洞，并且所有的漏洞都失败了，那么我们将检查目标机是否仍然是可达的。如果没有，也就是说，从受控机器到非受控机器的edge被封闭了，那么我们就宣称当前的情况是没有希望的。</p>
-<h2 id="网络模型的构建"><a href="#网络模型的构建" class="headerlink" title="网络模型的构建"></a>网络模型的构建</h2><p>可以理解的是，现代组织关心的是披露有关其网络配置的信息，这可能对恶意黑客有用。因此，目前没有公开的包含所有所需信息的网络数据，包括网络连接、每台机器配置和相关软件，这并不奇怪。为了测试我们的方法，我们使用扫描一个大型组织的网络获得的数据创建了真实的模型，其中包含几个子网。通过使用扫描发现的机器配置和现有漏洞，我们可以创建真实的模型，使我们能够对我们的方法进行经验评估。我们现在解释模型获取过程，然后回顾获得的模型的一些特性。</p>
-<p>有许多现有的应用程序允许从外部或内部扫描网络，以获得主机及其属性的列表。我们使用下面的Nessus扫描程序(<a href="http://www.tenable.com" target="_blank" rel="noopener">www.tenable.com</a> )扫描IP范围内所有可见主机。扫描显示了已识别机器的以下属性——操作系统，一些已安装的软件和一个可能的漏洞列表，遵循CVE约定(cve.mitre.org/)。扫描包含大约50个已识别的软件，包括众所周知的应用程序，如openssh、tomcat、pcanywhere、ftp服务等等。扫描结果显示了数百种漏洞类型。根据CVSS公约(<a href="http://www.first.org/cvss/" target="_blank" rel="noopener">www.first.org/cvss/</a> )，我们过滤掉所有中、低严重程度的漏洞，剩下大约60种高严重程度或严重级别的漏洞。没有漏洞的主机对我们来说并不有趣，并且已经从模型中删除了。但是，Nessus扫描不会攻击主机，而是在其他机器上安装远程代理。因此，不能从扫描主机直接看到的机器，例如防火墙后面的机器，将不会出现在扫描中。<br>为了发现网络中的所有机器，我们从每个子网中的一台主机上运行扫描，从而识别子网中的所有主机，以及子网中可见的所有主机。此外，我们从组织外部运行另一个扫描，识别可以从外部直接访问的主机，如DMZ。<br>扫描还可以识别一些对我们来说是多余的信息，比如系统中的交换机和门。我们过滤掉这些信息。</p>
-<h2 id="Q-POCHP模型构建"><a href="#Q-POCHP模型构建" class="headerlink" title="Q-POCHP模型构建"></a>Q-POCHP模型构建</h2><p>通过扫描，我们可以创建Q-POCHP模型。首先，Q-POCHP的节点是扫描中标识的主机，此外还有一个“internet”主机，它表示组织外部的任意主机。对于每个子网s，我们假设s中的所有主机都是连接的。对于其他子网中的主机，我们假设在从s内的机器扫描时可见的其他子网中的所有主机对s内的所有其他主机都是可见的。</p>
-<p>Nessus揭示了在机器上运行的真正操作系统和软件，但是攻击者必须以与Nessus类似的方式探测机器，以获得这些信息。因此，模型没有指定每个主机的真正操作系统和软件，而是引入了不确定性，允许子网s中的每台机器运行在s中找到的任何操作系统。对于运行中的软件，我们增加了有限的不确定性。我们在Nessus标识的软件中添加了一些运行在同一子网内的其他机器上的抽样软件。</p>
-<p>这个过程将有限的结构化不确定性添加到模型中，模拟攻击者的部分知识。例如，攻击者可能只知道子网中可能存在哪些操作系统，而不知道每个主机正在运行哪些操作系统。最后，我们将每个主机可能存在的漏洞设置为扫描检测到的漏洞，避免添加额外的漏洞。被扫描者识别的可能的漏洞可能不存在，因为Nessus不会试图利用漏洞攻击机器。我们遵循这一点，允许模型定义中存在或不存在这些漏洞的状态。</p>
-<h2 id="POMDP模型-1"><a href="#POMDP模型-1" class="headerlink" title="POMDP模型"></a>POMDP模型</h2><p>POMDP模型比Q-POCHP模型多了概率和cost<br>我们为所有网络机器的每个可能配置定义一个状态。配置概率基于扫描子网中的频率。</p>
-<p>我们使用确定性漏洞利用控制给定机器的行为，也会导致确定性的成功或失败观察。网络连接结构嵌入到转换和观测概率中。探测没有受控邻居的机器会导致错误的观察。即使主机上存在漏洞，没有受控邻居的机器上的一个漏洞利用也不会改变状态。</p>
-<p>Nessus输出包含识别的漏洞使用成本，用于我们模型中的漏洞操作。只能通过从主机监听网络流量来探测主机的操作系统。因此，我们为ProbeOS(host,os)操作设置了一个非常低的cost(0.1)。运行软件的探测成本较低，因为需要向等待响应的软件区域发出请求。我们将软件探测成本设置为等于成本最低的exploit(1)。</p>
-<p>只有在目标机器之一被控制时终止，我们才奖励 attacker (1000) 。代理在deadend状态终止时不会受到任何惩罚。如果在没有控制目标机器的情况下，在非deadend状态下终止，我们将添加一个很大的penalty (-1000) 。我们认为这些奖励是我们建模方法中最薄弱的部分，因为它们不受数据的支持，而是由我们诱导，以促使代理朝着理想的行为发展。对这种奖励设置的更深入调查将留给未来的工作。</p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>在真实网络上测试：良好<br>虽然我们的计划器可以很好地扩展到大型网络，但是由计划器计算的策略的质量也很重要。这可以通过比较从执行政策到POMDP政策预期回报的期望值来实现。</p>
-<p>由于POMDP解算器无法扩展到真正的网络，我们创建了一组可以由sarsopsolver（kurniawati、hsu和lee2008）处理的微型网络，使用我们的网络扫描收集的数据。首先，我们从网络的各个子网中抽取一组n台连接的机器，从每台机器的实际运行软件中抽取一组m软件，按照扫描中给定操作系统的软件频率。然后，我们对每个软件的k个漏洞进行抽样，再次跟踪数据中的漏洞频率。每个软件和漏洞都可以存在于计算机上，也可以不存在。这个过程提供了一组配置，我们假设每个机器都可以有这些可能的配置。 我们通过扫描操作系统、软件和漏洞的分布来计算概率。概率是数据的最大似然估计，归一化到特定实例的简化样本。</p>
-<p>我们建议将应急计划作为模拟测试的工具，支持各种特性的部分可观测性、操作系统和安装软件，这些都可以通过探测动作感知。或有规划提供了比经典规划更丰富的模型，同时能够比基于pomdp的方法更好地扩展。我们展示了我们的方法扩展到超出当前POMDP解决程序能力的真实网络大小，并将其预期回报与较小网络上的POMDP进行了比较。在未来，我们打算创建更智能的启发式来排序给定状态下的操作，以获得更好的预期回报。我们还打算构造自动化的方法来从计划图中得出结论，例如首先修复哪些漏洞。</p>
-
+        
+          <a class="article-more-a" href="/2018/12/30/plan/#more">more >></a>
+        
       
 
       
@@ -572,11 +486,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">firmware</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">firmware</a>
         		</li>
       		
 		</ul>
@@ -652,11 +566,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">exploit</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">exploit</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">paper</a>
         		</li>
       		
 		</ul>
@@ -940,6 +854,86 @@
 
 
   
+    <article id="post-red-team-chatper1" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/13/red-team-chatper1/">Hacker play book chapter 1</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/13/red-team-chatper1/" class="archive-article-date">
+  	<time datetime="2018-11-13T09:40:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>红队测试-1 准备阶段<br>
+        
+          <a class="article-more-a" href="/2018/11/13/red-team-chatper1/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">CTF365</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">xss</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/13/red-team-chatper1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CTF365-XSS" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -991,80 +985,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/11/13/CTF365-XSS/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-upload-file" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/12/upload-file/">文件上传漏洞</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/12/upload-file/" class="archive-article-date">
-  	<time datetime="2018-11-12T10:21:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h2><p>0.在客户端用javascript或flash验证用户上传的文件格式，但上传到服务器后没验证。<br>1.对用户上传的文件只检查了ContentType，但ContentType是可以被用户修改的，所以用户上传的脚本文件可以将ContentType改成image/gif来绕过检查。<br>2.黑名单机制。检查用户上传的文件的后缀，如果是处于黑名单中的后缀，就返回错误信息。但黑名单机制很不好，不够完善，当黑名单中有遗漏的时候，攻击者就能够生虚而入。<br>3.没有对用户上传的文件改名。网站有时候检查了用户上传的文件后缀是.jpg或.gif，于是就上传成功了，不对上传的文件进行改名。但一旦服务器存在解析漏洞，攻击者就可以利用畸形文件名来上传恶意代码。比如IIS6.0的解析漏洞，攻击者即可上传文件名类似“muma.asp;.gif”的文件，虽然看起来是一个gif格式，但IIS6.0就会把它解析成asp脚本运行。<br>4.解压缩功能造成问题。有些网站有这样的功能，比如wordpress和emlog后台支持上传压缩包（上传后自动解压），这样我们把恶意代码写在压缩包中某文件里，就能在上传解压后被运行。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">FileUpload</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/12/upload-file/">展开全文 >></a>
         </p>
       
 
@@ -1191,6 +1111,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CSRF</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">《白帽子讲web安全》</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">CTF365</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">xss</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">HTML5</a>
               </li>
              
@@ -1203,38 +1139,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CSRF</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">《白帽子讲web安全》</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ML</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">CTF365</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">xss</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">firmware</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">paper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">exploit</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
               </li>
              
@@ -1243,7 +1147,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">exploit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">paper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">firmware</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">FileUpload</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ML</a>
               </li>
              
               <li class="article-tag-list-item">
