@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="文章的阅读大部分是没有顺序的，就是看到什么读一下，然后会扩展一下参考文献里有意义的。">
-<meta name="keywords" content="paper,exploit">
+  <meta name="description" content="红队侦察一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。">
+<meta name="keywords" content="red team">
 <meta property="og:type" content="article">
-<meta property="og:title" content="auto-exploit-paper">
-<meta property="og:url" content="http://yoursite.com/2018/11/19/auto-exploit-paper/index.html">
+<meta property="og:title" content="HackerPlaybook-chapter2">
+<meta property="og:url" content="http://yoursite.com/2019/05/15/HackerPlaybook-chapter2/index.html">
 <meta property="og:site_name" content="欢歌笑语">
-<meta property="og:description" content="文章的阅读大部分是没有顺序的，就是看到什么读一下，然后会扩展一下参考文献里有意义的。">
+<meta property="og:description" content="红队侦察一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-22T09:39:30.462Z">
+<meta property="og:updated_time" content="2019-05-15T02:21:24.576Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="auto-exploit-paper">
-<meta name="twitter:description" content="文章的阅读大部分是没有顺序的，就是看到什么读一下，然后会扩展一下参考文献里有意义的。">
+<meta name="twitter:title" content="HackerPlaybook-chapter2">
+<meta name="twitter:description" content="红队侦察一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。">
 
 
 
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/2018/11/19/auto-exploit-paper/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/15/HackerPlaybook-chapter2/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>auto-exploit-paper | 欢歌笑语</title>
+  <title>HackerPlaybook-chapter2 | 欢歌笑语</title>
   
 
 
@@ -328,7 +328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/19/auto-exploit-paper/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/15/HackerPlaybook-chapter2/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wangxy">
@@ -345,7 +345,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">auto-exploit-paper
+          <h1 class="post-title" itemprop="name headline">HackerPlaybook-chapter2
 
               
             
@@ -371,28 +371,34 @@
                 
               
 
-              <time title="创建时间：2018-11-19 14:29:42" itemprop="dateCreated datePublished" datetime="2018-11-19T14:29:42+08:00">2018-11-19</time>
+              <time title="创建时间：2019-05-15 20:35:39 / 修改时间：10:21:24" itemprop="dateCreated datePublished" datetime="2019-05-15T20:35:39+08:00">2019-05-15</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-22 17:39:30" itemprop="dateModified" datetime="2018-11-22T17:39:30+08:00">2018-11-22</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hacker-Playbook/" itemprop="url" rel="index"><span itemprop="name">Hacker Playbook</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -422,29 +428,29 @@
       
 
       
-        <p>文章的阅读大部分是没有顺序的，就是看到什么读一下，然后会扩展一下参考文献里有意义的。</p>
-<a id="more"></a>
-<h2 id="Pangr：基于行为的漏洞自动检测和利用框架"><a href="#Pangr：基于行为的漏洞自动检测和利用框架" class="headerlink" title="Pangr：基于行为的漏洞自动检测和利用框架"></a>Pangr：基于行为的漏洞自动检测和利用框架</h2><p>时间&amp;会议：2018 IEEE</p>
-<p>亮点：<br>1.不光有检测漏洞与利用漏洞，还有自动打补丁；<br>2.可以检测heap漏洞</p>
-<p>流程与模块<br>1.初始化模块：静态分析出library函数并在下一步符号执行中放弃<br>2.crash engine：通过符号执行辅助的fuzz发现crash——Driller<br>3.漏洞分析：对格式化字符串漏洞、栈溢出漏洞、堆溢出漏洞进行建模<br>4.漏洞利用<br>5.防御模块</p>
-<p>打补丁：<br>1.可以通过过滤输入进行防御——可能会造成某些<br>2.通过patchkit打补丁</p>
-<h2 id="自动化二进制分析技术–angr"><a href="#自动化二进制分析技术–angr" class="headerlink" title="自动化二进制分析技术–angr"></a>自动化二进制分析技术–angr</h2><p>简介：介绍常见二进制自动分析技术，包括静态分析和动态分析，同时提出了angr框架</p>
-<p>参考：</p>
-<p>测试集：DARPA Cyber Grand Challenge，仅7个系统调用</p>
-<p>静态分析：控制流图(CFG,挑战：间接跳转)、数据流图、控制依赖图<br>动态分析：动态的具体执行（基于污点的FUZZ、基于覆盖的FUZZ）<br>         动态的符号执行：经典动态符号执行、<em>符号辅助FUZZ</em>、非约束性符号执行  ——都会受到路径爆炸的限制</p>
-<p>exploit利用：现有的利用漏洞方式出现在ASLR、DEP之前，因此出现了将传统的基于shellcode的漏洞利用转换为面向返回编程的等效漏洞。52，18，48<br>angr的模块：<br>1.中间表示IR：使用了Valgrind项目<br>2.二进制加载：CLE<br>3.程序状态表示：simuVEX<br>4.数据模型：Claripy</p>
-<p>符号执行：CFG的生成</p>
-<p>ROP链编译器</p>
-<h2 id="符号辅助FUZZ：Driller"><a href="#符号辅助FUZZ：Driller" class="headerlink" title="符号辅助FUZZ：Driller"></a>符号辅助FUZZ：Driller</h2><p>和angr是同一个作者<br>使用AFL作为符号辅助FUZZ的基础，，使用angr作为符号跟踪器，按照模糊器发现新状态转换的速率采取行动。</p>
-<h2 id="符号执行简介"><a href="#符号执行简介" class="headerlink" title="符号执行简介"></a>符号执行简介</h2><p>符号执行最初提出是在70年代中期，主要描述的是静态符合执行的原理，到了2005年左右突然开始重新流行，是因为引入了一些新的技术让符号执行更加实用。Concolic执行的提出让符号执行真正成为可实用的程序分析技术，并且大量用于软件测试、逆向工程等领域。在2005年作用涌现出很多工作，如DART[5]、CUTE[6]、EGT/EXE[7]、CREST[8]等等，但真正值得关注和细读的，应该是2008年Cristian Cadar开发的KLEE[3]。KLEE可以说是源代码符号执行的经典作品，又是开源的，后来的许多优秀的符号执行工具都是建立在KLEE的基础上，因此我认为研究符号执行，KLEE的文章是必读的。</p>
-<p>基于二进制的符号执行工具则是2009年EPFL的George Candea团队开发的S2E[9]最为著名，其开创了选择符号执行这种方式。2012年CMU的David Brumley团队提出的Mayhem[10]则采用了混合offline和online的执行方式。2008年UC Berkeldy的Dawn Song团队提出的BitBlaze[11]二进制分析平台中的Rudder模块使用了online的执行方式，也值得一看。总之，基于二进制的符号执行工作了解这三个就足够了。其中，S2E有开源的一个版本，非常值得仔细研究。最近比较火的angr[12]，是一个基于Python实现的二进制分析平台，完全开源且还在不断更新，其中也实现了多种不同的符号执行策略。</p>
-<p>在优化技术上，近几年的两个工作比较值得一看其一是2014年David Brumley团队提出的路径融合方法，叫做Veritesting[13]，是比较重要的工作之一，angr中也实现了这种符号执行方式。另一个是2015年Stanford的Dawson Engler（这可是Cristian Cadar的老师）团队提出的Under-Constrained SymbolicExecution[14]。</p>
-<p>另外，近年流行的符号执行与fuzzing技术相结合以提升挖掘漏洞效率，其实早在DART和2012年微软的SAGE[15]工作中就已经有用到这种思想，但这两年真正火起来是2016年UCSB的Shellphish团队发表的Driller[16]论文，称作符号辅助的fuzzing（symbolic-assisted fuzzing），也非常值得一看。</p>
-<h2 id="自动shellcode移植-王若愚"><a href="#自动shellcode移植-王若愚" class="headerlink" title="自动shellcode移植  王若愚"></a>自动shellcode移植  王若愚</h2><p>挑战：<br>1.将shellcode与漏洞利用的其他部分分开<br>2.将原始shellcode重写<br>3.shellcode与利用的其他内容彼此相互依赖：比如替换后的shellcode比较长，会覆盖到控制流部分</p>
-<p>输入：binary、现有漏洞利用、用户指定的替换shellcode<br>输出：修改后的漏洞利用程序<br>技术：路径生成器、符号执行<br>ShellSwap：针对于控制流劫持的攻击</p>
-<p>步骤：<br>1.控制流劫持之前：符号追踪，生成程序可利用状态，记录条件分支中的路径约束。<br>  判断控制流劫持：基于污点的可执行安全策略<br>  动态符号执行判断追踪，产生路径约束和可利用状态(包括寄存器符号值，内存状态)</p>
-<p>2.shellcode移植<br>首先识别可以放置shellcode的地方；<br>布局修复算法</p>
-<h2 id="php审计与自动化利用"><a href="#php审计与自动化利用" class="headerlink" title="php审计与自动化利用"></a>php审计与自动化利用</h2><p>joern–生成代码属性图，c语言</p>
+        <h1 id="红队侦察"><a href="#红队侦察" class="headerlink" title="红队侦察"></a>红队侦察</h1><p>一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。<br><a id="more"></a></p>
+<h2 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h2><p>一个好的侦察手段（脚本）应该是自动化的，包含端口可扩展、定时侦察、历史信息记录、电子邮件提醒/通知、diff分析等。</p>
+<p>本书中的一个端口扫描，然后比较结果的例子：(使用时注意windows和Linux的脚本字符问题，一个是dos，一个是unix)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">mkdir /opt/nmap_diff</span><br><span class="line">d=$(date+%Y-%m-%d)</span><br><span class="line">y=$(date -d yesterday +%Y-%m-%d)</span><br><span class="line">/usr/bin/nmap -T4 -oX /opt/nmap_diff/scan_$d.xml 10.10.20.84 &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">if [ -e /opt/nmap_diff/scan_$y.xml ];then</span><br><span class="line">/usr/bin/ndiff /opt/nmap_diff/scan_$y.xml /opt/nmap_diff/scan_$d.xml &gt; /opt/nmap_diff/diff.txt</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
+<p>nmap的xml输出结果可以用<code>[Eyewitness](https://github.com/ChrisTruncer/EyeWitness)</code>查看</p>
+<p>大规模快速扫描：<code>Masscan</code></p>
+<h2 id="云扫描"><a href="#云扫描" class="headerlink" title="云扫描"></a>云扫描</h2><p>首先要知道几大服务提供商的IP地址的范围</p>
+<p>主要的搜索引擎：</p>
+<ul>
+<li>shodan : 定期扫描互联网，抓取banners、端口、网络信息等<br>  title: 搜索从 HTML 标记中提取的内容<br>  html: 搜索返回页面的完整 HTML 内容<br>  product: 搜索 banner 中标识的软件或产品的名称<br>  net: 搜索一个指定的网段(例如:204.51.94.79/18)</li>
+</ul>
+<ul>
+<li>Censys.io : 从SSL证书中提取信息，分析该服务器的托管商是谁，查询脚本：<a href="https://github.com/christophetd/censys-subdomain-finder" target="_blank" rel="noopener">https://github.com/christophetd/censys-subdomain-finder</a></li>
+</ul>
+<h2 id="手动解析SSL证书"><a href="#手动解析SSL证书" class="headerlink" title="手动解析SSL证书"></a>手动解析SSL证书</h2><p><a href="https://github.com/cheetz/sslScrape" target="_blank" rel="noopener">sslScrape</a>利用 <code>Masscan</code> 快速扫描大型网络。一旦它识别到443端口的服务，它就会在 SSL 证书中提取主机名。</p>
+<blockquote>
+<p>注：有时间学习下sslScrape的源码</p>
+</blockquote>
+<h2 id="子域名收集"><a href="#子域名收集" class="headerlink" title="子域名收集"></a>子域名收集</h2><p><a href="https://github.com/leebaird/discover" target="_blank" rel="noopener">Discover Scripts</a>工具:集合了kali上的很多子域名收集工具</p>
+<p><a href="google">KNOCK</a>: 通过一个 wordlist 来枚举目标域中的子域名，严重的依赖字典的质量</p>
+<p><a href="https://github.com/Plazmaz/Sublist3r" target="_blank" rel="noopener">Sublist3r</a>:通过搜索引擎,爬虫收集</p>
+<p><a href="google">Truffle Hog</a>,<a href="https://github.com/anshumanbh/git-all-secrets" target="_blank" rel="noopener">git-all-secrets</a>:从github仓库中提取机密数据、密码、密钥等</p>
+<h2 id="寻找电子邮件"><a href="#寻找电子邮件" class="headerlink" title="寻找电子邮件"></a>寻找电子邮件</h2><p>SimplyEmail</p>
+<h2 id="开放资源情报计划：Open-source-intelligence"><a href="#开放资源情报计划：Open-source-intelligence" class="headerlink" title="开放资源情报计划：Open source intelligence"></a>开放资源情报计划：Open source intelligence</h2><p>OSINT 链接合集: <a href="https://github.com/IVMachiavelli/OSINT_Team_Links" target="_blank" rel="noopener">https://github.com/IVMachiavelli/OSINT_Team_Links</a><br>OSINT 框架: <a href="http://osintframework.com/" target="_blank" rel="noopener">http://osintframework.com/</a></p>
 
       
     </div>
@@ -468,9 +474,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/paper/" rel="tag"># paper</a>
-          
-            <a href="/tags/exploit/" rel="tag"># exploit</a>
+            <a href="/tags/red-team/" rel="tag"># red team</a>
           
         </div>
       
@@ -483,8 +487,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/18/HTML5-security/" rel="next" title="HTML5 安全">
-                <i class="fa fa-chevron-left"></i> HTML5 安全
+              <a href="/2019/05/14/HackerPlaybook-chapter1/" rel="next" title="HackerPlaybook-chapter1">
+                <i class="fa fa-chevron-left"></i> HackerPlaybook-chapter1
               </a>
             
           </div>
@@ -492,10 +496,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/21/firmware-paper/" rel="prev" title="firmware-paper">
-                firmware-paper <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -676,7 +676,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pangr：基于行为的漏洞自动检测和利用框架"><span class="nav-number">1.</span> <span class="nav-text">Pangr：基于行为的漏洞自动检测和利用框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动化二进制分析技术–angr"><span class="nav-number">2.</span> <span class="nav-text">自动化二进制分析技术–angr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#符号辅助FUZZ：Driller"><span class="nav-number">3.</span> <span class="nav-text">符号辅助FUZZ：Driller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#符号执行简介"><span class="nav-number">4.</span> <span class="nav-text">符号执行简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动shellcode移植-王若愚"><span class="nav-number">5.</span> <span class="nav-text">自动shellcode移植  王若愚</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#php审计与自动化利用"><span class="nav-number">6.</span> <span class="nav-text">php审计与自动化利用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#红队侦察"><span class="nav-number">1.</span> <span class="nav-text">红队侦察</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口扫描"><span class="nav-number">1.1.</span> <span class="nav-text">端口扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#云扫描"><span class="nav-number">1.2.</span> <span class="nav-text">云扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手动解析SSL证书"><span class="nav-number">1.3.</span> <span class="nav-text">手动解析SSL证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子域名收集"><span class="nav-number">1.4.</span> <span class="nav-text">子域名收集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻找电子邮件"><span class="nav-number">1.5.</span> <span class="nav-text">寻找电子邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开放资源情报计划：Open-source-intelligence"><span class="nav-number">1.6.</span> <span class="nav-text">开放资源情报计划：Open source intelligence</span></a></li></ol></li></ol></div>
             
 
           </div>
