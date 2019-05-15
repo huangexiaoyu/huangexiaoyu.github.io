@@ -96,24 +96,18 @@
 
 
 
-  <meta name="description" content="对CTF365的XSS challenge进行记录">
-<meta name="keywords" content="CTF365,xss">
+  <meta name="description" content="红队侦察一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。">
+<meta name="keywords" content="red team">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CTF365的XSS挑战">
-<meta property="og:url" content="http://yoursite.com/2018/11/13/CTF365-XSS/index.html">
+<meta property="og:title" content="HackerPlaybook-chapter2">
+<meta property="og:url" content="http://yoursite.com/2019/05/14/HackerPlaybook-chapter2/index.html">
 <meta property="og:site_name" content="欢歌笑语">
-<meta property="og:description" content="对CTF365的XSS challenge进行记录">
+<meta property="og:description" content="红队侦察一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest02.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest03.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest04.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest05.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest06.jpg">
-<meta property="og:updated_time" content="2018-11-13T13:08:22.567Z">
+<meta property="og:updated_time" content="2019-05-15T02:10:09.134Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CTF365的XSS挑战">
-<meta name="twitter:description" content="对CTF365的XSS challenge进行记录">
-<meta name="twitter:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest02.jpg">
+<meta name="twitter:title" content="HackerPlaybook-chapter2">
+<meta name="twitter:description" content="红队侦察一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。">
 
 
 
@@ -121,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/2018/11/13/CTF365-XSS/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/14/HackerPlaybook-chapter2/">
 
 
 
@@ -131,7 +125,7 @@
   };
 </script>
 
-  <title>CTF365的XSS挑战 | 欢歌笑语</title>
+  <title>HackerPlaybook-chapter2 | 欢歌笑语</title>
   
 
 
@@ -334,7 +328,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/13/CTF365-XSS/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/14/HackerPlaybook-chapter2/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wangxy">
@@ -351,7 +345,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CTF365的XSS挑战
+          <h1 class="post-title" itemprop="name headline">HackerPlaybook-chapter2
 
               
             
@@ -377,16 +371,46 @@
                 
               
 
-              <time title="创建时间：2018-11-13 17:40:36 / 修改时间：21:08:22" itemprop="dateCreated datePublished" datetime="2018-11-13T17:40:36+08:00">2018-11-13</time>
+              <time title="创建时间：2019-05-14 20:35:39" itemprop="dateCreated datePublished" datetime="2019-05-14T20:35:39+08:00">2019-05-14</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-15 10:10:09" itemprop="dateModified" datetime="2019-05-15T10:10:09+08:00">2019-05-15</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Hacker-Playbook/" itemprop="url" rel="index"><span itemprop="name">Hacker Playbook</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -416,31 +440,29 @@
       
 
       
-        <p>对CTF365的XSS challenge进行记录<br><a id="more"></a></p>
-<h1 id="第一关"><a href="#第一关" class="headerlink" title="第一关"></a>第一关</h1><p>用最简单的<code>&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;</code>测试，根据回显，发现过滤了<code>&lt;script&gt;</code>，并且把<code>script</code>替换成了<code>scr.pt</code></p>
-<p>改用另外的标签<code>&lt;img&gt;</code>,即<code>&lt;img src=x onerror=alert(1)&gt;</code></p>
-<p>测试通过！</p>
-<h1 id="第二关"><a href="#第二关" class="headerlink" title="第二关"></a>第二关</h1><p>和前一关一样，进行测试，发现增加了一些关键词的过滤，如<code>onerror</code> -&gt; <code>o.err</code> , <code>onclick</code>-&gt;<code>o.ick</code></p>
-<p>这两个都没有相似性，感觉应该是采用黑名单的过滤。</p>
-<p>测试<code>onmousemove</code>event,<code>&lt;img src=x onmousemove=alert(1)&gt;</code>,成功！</p>
-<p><img src="xsstest02.jpg" alt="xsstest02"></p>
-<h1 id="第三关"><a href="#第三关" class="headerlink" title="第三关"></a>第三关</h1><p>这一关感觉要比上一关简单啊。。。也是过滤，只不过是把这些全都过滤成空白字符串’’，所以把<code>onerror</code>插入<code>onerror</code>中，构成<code>ononerrorerror</code>，中间的<code>onerror</code>就被过滤成’’，留下<code>onerror</code></p>
-<p><code>&lt;img src=x ononerrormousemove=alert(1)&gt;</code></p>
-<p><img src="xsstest03.jpg" alt="xsstest03"></p>
-<h1 id="第四关"><a href="#第四关" class="headerlink" title="第四关"></a>第四关</h1><p>和之前的模式不同，这道题是要求输入post的url，然后会在下面显示出来。</p>
-<p>输入和输出如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http://&quot; ——&gt; &lt;a href=&quot;http://&quot; &quot;=&quot;&quot; alt=&quot;http://&quot;&gt;http://&quot;&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">不输入 ——&gt; &lt;a href=&quot;https://www.owasp.org/index.php/OWASP_Security_Shepherd&quot; alt=&quot;OWASP Security Shepherd&quot;&gt;https://www.owasp.org/index.php/OWASP_Security_Shepherd&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">http://&quot;alert(1) ——&gt; &lt;a href=&quot;http://&quot; alert&amp;#x28;1&amp;#x29;&quot;=&quot;&quot; alt=&quot;http://&quot;&gt;http://&quot;alert(1)&lt;/a&gt;</span><br></pre></td></tr></table></figure>
-<p>也就是说，过滤了特殊字符<code>&lt;</code> <code>&gt;</code> <code>&quot;</code>等，还过滤了on事件，并将on转换成unicode编码。</p>
-<p>在这里浪费了一些时间。。。其实应该很快就想到，过滤了小写，但是没有过滤大写啊！！</p>
-<p>payload：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http&quot;Onerror=alert(1)</span><br></pre></td></tr></table></figure></p>
-<p><img src="xsstest04.jpg" alt="xsstest04"></p>
-<h1 id="第五关"><a href="#第五关" class="headerlink" title="第五关"></a>第五关</h1><p>这一关过的稀里糊涂。。。和第四关差不多，多了一条是url必须是url的模样。</p>
-<p>先试了一下第四关的payload，发现出现了onerror还是被<code>&quot;&quot;</code>框起来了，于是就又加了一个<code>&quot;</code>,然后就成功了。</p>
-<p>payload：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:\\123.com&quot;&quot;onerror=alert(1)</span><br></pre></td></tr></table></figure></p>
-<p><img src="xsstest05.jpg" alt="xsstest05"></p>
-<h1 id="第六关"><a href="#第六关" class="headerlink" title="第六关"></a>第六关</h1><p>同样的payload，又过了这一关。。。</p>
-<p><img src="xsstest06.jpg" alt="xsstest06"></p>
-<h1 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h1><p>没想到CTF365的XSS还是对萌新很友好的</p>
+        <h1 id="红队侦察"><a href="#红队侦察" class="headerlink" title="红队侦察"></a>红队侦察</h1><p>一些可以在内网或外网使用的工具，以红队的角度对目标的基础设施进行侦察或扫描。<br><a id="more"></a></p>
+<h2 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h2><p>一个好的侦察手段（脚本）应该是自动化的，包含端口可扩展、定时侦察、历史信息记录、电子邮件提醒/通知、diff分析等。</p>
+<p>本书中的一个端口扫描，然后比较结果的例子：(使用时注意windows和Linux的脚本字符问题，一个是dos，一个是unix)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">mkdir /opt/nmap_diff</span><br><span class="line">d=$(date+%Y-%m-%d)</span><br><span class="line">y=$(date -d yesterday +%Y-%m-%d)</span><br><span class="line">/usr/bin/nmap -T4 -oX /opt/nmap_diff/scan_$d.xml 10.10.20.84 &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">if [ -e /opt/nmap_diff/scan_$y.xml ];then</span><br><span class="line">/usr/bin/ndiff /opt/nmap_diff/scan_$y.xml /opt/nmap_diff/scan_$d.xml &gt; /opt/nmap_diff/diff.txt</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
+<p>nmap的xml输出结果可以用<code>[Eyewitness](https://github.com/ChrisTruncer/EyeWitness)</code>查看</p>
+<p>大规模快速扫描：<code>Masscan</code></p>
+<h2 id="云扫描"><a href="#云扫描" class="headerlink" title="云扫描"></a>云扫描</h2><p>首先要知道几大服务提供商的IP地址的范围</p>
+<p>主要的搜索引擎：</p>
+<ul>
+<li>shodan : 定期扫描互联网，抓取banners、端口、网络信息等<br>  title: 搜索从 HTML 标记中提取的内容<br>  html: 搜索返回页面的完整 HTML 内容<br>  product: 搜索 banner 中标识的软件或产品的名称<br>  net: 搜索一个指定的网段(例如:204.51.94.79/18)</li>
+</ul>
+<ul>
+<li>Censys.io : 从SSL证书中提取信息，分析该服务器的托管商是谁，查询脚本：<a href="https://github.com/christophetd/censys-subdomain-finder" target="_blank" rel="noopener">https://github.com/christophetd/censys-subdomain-finder</a></li>
+</ul>
+<h2 id="手动解析SSL证书"><a href="#手动解析SSL证书" class="headerlink" title="手动解析SSL证书"></a>手动解析SSL证书</h2><p><a href="https://github.com/cheetz/sslScrape" target="_blank" rel="noopener">sslScrape</a>利用 <code>Masscan</code> 快速扫描大型网络。一旦它识别到443端口的服务，它就会在 SSL 证书中提取主机名。</p>
+<blockquote>
+<p>注：有时间学习下sslScrape的源码</p>
+</blockquote>
+<h2 id="子域名收集"><a href="#子域名收集" class="headerlink" title="子域名收集"></a>子域名收集</h2><p><a href="https://github.com/leebaird/discover" target="_blank" rel="noopener">Discover Scripts</a>工具:集合了kali上的很多子域名收集工具</p>
+<p><a href="">KNOCK</a>: 通过一个 wordlist 来枚举目标域中的子域名，严重的依赖字典的质量</p>
+<p><a href="https://github.com/Plazmaz/Sublist3r" target="_blank" rel="noopener">Sublist3r</a>:通过搜索引擎,爬虫收集</p>
+<p><a href="">Truffle Hog</a>,<a href="https://github.com/anshumanbh/git-all-secrets" target="_blank" rel="noopener">git-all-secrets</a>:从github仓库中提取机密数据、密码、密钥等</p>
+<h2 id="寻找电子邮件"><a href="#寻找电子邮件" class="headerlink" title="寻找电子邮件"></a>寻找电子邮件</h2><p>SimplyEmail</p>
+<h2 id="开放资源情报计划：Open-source-intelligence"><a href="#开放资源情报计划：Open-source-intelligence" class="headerlink" title="开放资源情报计划：Open source intelligence"></a>开放资源情报计划：Open source intelligence</h2><p>OSINT 链接合集: <a href="https://github.com/IVMachiavelli/OSINT_Team_Links" target="_blank" rel="noopener">https://github.com/IVMachiavelli/OSINT_Team_Links</a><br>OSINT 框架: <a href="http://osintframework.com/" target="_blank" rel="noopener">http://osintframework.com/</a></p>
 
       
     </div>
@@ -464,9 +486,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/CTF365/" rel="tag"># CTF365</a>
-          
-            <a href="/tags/xss/" rel="tag"># xss</a>
+            <a href="/tags/red-team/" rel="tag"># red team</a>
           
         </div>
       
@@ -479,8 +499,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/12/upload-file/" rel="next" title="文件上传漏洞">
-                <i class="fa fa-chevron-left"></i> 文件上传漏洞
+              <a href="/2019/05/14/HackerPlaybook-chapter1/" rel="next" title="HackerPlaybook-chapter1">
+                <i class="fa fa-chevron-left"></i> HackerPlaybook-chapter1
               </a>
             
           </div>
@@ -488,10 +508,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/14/PRET-tool/" rel="prev" title="PRET tool">
-                PRET tool <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -672,7 +688,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一关"><span class="nav-number">1.</span> <span class="nav-text">第一关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二关"><span class="nav-number">2.</span> <span class="nav-text">第二关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三关"><span class="nav-number">3.</span> <span class="nav-text">第三关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四关"><span class="nav-number">4.</span> <span class="nav-text">第四关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五关"><span class="nav-number">5.</span> <span class="nav-text">第五关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第六关"><span class="nav-number">6.</span> <span class="nav-text">第六关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结一下"><span class="nav-number">7.</span> <span class="nav-text">总结一下</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#红队侦察"><span class="nav-number">1.</span> <span class="nav-text">红队侦察</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#端口扫描"><span class="nav-number">1.1.</span> <span class="nav-text">端口扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#云扫描"><span class="nav-number">1.2.</span> <span class="nav-text">云扫描</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手动解析SSL证书"><span class="nav-number">1.3.</span> <span class="nav-text">手动解析SSL证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子域名收集"><span class="nav-number">1.4.</span> <span class="nav-text">子域名收集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寻找电子邮件"><span class="nav-number">1.5.</span> <span class="nav-text">寻找电子邮件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开放资源情报计划：Open-source-intelligence"><span class="nav-number">1.6.</span> <span class="nav-text">开放资源情报计划：Open source intelligence</span></a></li></ol></li></ol></div>
             
 
           </div>
