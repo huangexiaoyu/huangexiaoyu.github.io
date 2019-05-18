@@ -324,6 +324,339 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/18/CSRF-info/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wangxy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢歌笑语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/18/CSRF-info/" class="post-title-link" itemprop="url">CSRF--《白帽子讲web安全》</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-18 18:21:02 / 修改时间：18:54:35" itemprop="dateCreated datePublished" datetime="2018-11-18T18:21:02+08:00">2018-11-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>CSRF：Cross Site Request Forgery，跨站请求伪造，伪造请求，诱导用户点击</p>
+<p>Third-party cookie：服务器在set-cookie时指定了Expire时间，只有到时间后cookie才会失效，如果浏览器从一个域的页面中要加载另一个域的资源，出于安全原因，某些浏览器会阻止third-party cookie的发送。这种cookie保存在本地。<br>session cookie：没有指定Expire时间，浏览器关闭后，即失效，保存在浏览器进程的内存空间中。</p>
+<p>P3P头</p>
+<h1 id="GET和POST问题"><a href="#GET和POST问题" class="headerlink" title="GET和POST问题"></a>GET和POST问题</h1><p>就一些表单来说，因为没有严格的区分GET和POST，所以可以用GET来请求。（比如php里的REQUEST方法可以用GET绕过）</p>
+<p>也可以通过JS自动提交</p>
+<h1 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h1><p>验证码</p>
+<p>不利于用户体验</p>
+<p>Referer Check</p>
+<p>Token：一致使用，不可预测性原则，对同时存在XSS的网站失效</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/15/paper-PRET/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wangxy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢歌笑语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/15/paper-PRET/" class="post-title-link" itemprop="url">Exploiting Network Printers</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-15 08:57:53" itemprop="dateCreated datePublished" datetime="2018-11-15T08:57:53+08:00">2018-11-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-14 15:35:19" itemprop="dateModified" datetime="2019-05-14T15:35:19+08:00">2019-05-14</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>论文对打印机做出了全面的系统的评测,提出了一个开源的<em>半自动化工具</em>PRinter Exploitation Toolkit(PRET),并把这个工具用到新式打印工具如google云打印上。</p>
+<p>文章用几个问答去解决需要解决的问题。</p>
+<p><em>问</em>：目前(2017)打印机研究的状态？<br><em>答</em>：有很多CVE和安全博客的关于打印机漏洞的记录，但是没有得到重视。所以在本文中，使用PostScript和PJL作为主要的攻击对象，并且扩展了<code>跨站打印技术</code>(cross-printing)来引入我们提出的攻击方式——CORS spoofing。</p>
+<p><em>问</em>：目前存在的gaps<br><em>答</em>：略</p>
+<p><em>问</em>：新的研究方向<br><em>答</em>：应用我们的发现到新式打印，e.g.Google cloud printing</p>
+<h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><p>协议层次：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Device Control protocols:SNMP.NPAP</span><br><span class="line">Printing channel protocols: IPP,LPD,USB,raw port 9100   #用来放置恶意的postscript和PJL代码，port 9100给出恶意命令的返回</span><br><span class="line">Printer languages:</span><br><span class="line">    Job/printer control languages:PJL,PML  #PJL用来摧毁打印机,PML是HP特有的，可以用来恢复出场设置</span><br><span class="line">        Page description languages:PostScript,PCL,PDF,XPS,... #PDL语言，打印机可读懂，用来打印，不同牌子的打印机语言有很多种，最主要的是PCL和PostScript</span><br></pre></td></tr></table></figure></p>
+<h1 id="研究方法"><a href="#研究方法" class="headerlink" title="研究方法"></a>研究方法</h1><p>1.打印机采集，安装最新版固件；<br>2.研究PJL和PostScript里的脆弱点，列出可能的攻击，比如列文件目录等；并实现工具PRET<br>3.对检测到的脆弱点，进行测试。</p>
+<h1 id="攻击模型"><a href="#攻击模型" class="headerlink" title="攻击模型"></a>攻击模型</h1><p>1.物理接触AMphy</p>
+<ul>
+<li>插入存储介质</li>
+<li>可以按下某组合键<br>2.网络接触AMnet</li>
+<li>接触到所有网络服务：SMB SNMP LPD IPP 9100</li>
+<li>建立各种长时间的链接<br>3.web接触AMweb</li>
+<li>最脆弱的模型</li>
+<li>跨站打印</li>
+</ul>
+<h1 id="攻击"><a href="#攻击" class="headerlink" title="攻击"></a>攻击</h1><ul>
+<li>DoS<br>破坏打印：PDL可以用来计算或无限循环，会消耗大量的资源<br>物理破坏：NVRAM会放在EEPROM或flash memory里，只支持10000次重写</li>
+<li>绕过保护<br>出厂设置：通过物理按键或其他语言即可<br>后门：某些厂家会有</li>
+<li>操作打印作业<br>内容覆盖：修改水印的运算符<br>内容替换：</li>
+<li>信息泄露<br>CORS spoofing：使受害的内网用户加载website上的某个恶意的隐藏的iframe，(语言：PJL，PS)从而连接printer，并发送数据，但没有办法得到回复<br>获取内存：PostScript可以，Brother也可以获取NVRAM<br>文件系统：<br>打印作业：在内存中保存，提出了几种方法<br>证书泄露：<h1 id="PRET"><a href="#PRET" class="headerlink" title="PRET"></a>PRET</h1></li>
+<li>用户友好：定义类UNIX命令，如<code>ls</code> <code>cat</code> <code>pwd</code>，某些命令的完成可能需要发送很多个PostScript命令。<h1 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h1>对20台打印机进行以上攻击的评估，发现每台都有漏洞。</li>
+</ul>
+<p>有点长，选取几个有意义的点吧。</p>
+<ul>
+<li>打印文件的获取<br>文件重写：我们可以对PostScript中一个operator修改，然后进行hook，最后再调用正常的operator。<br>字符串替换</li>
+<li>信息泄露<br>内存访问<br>文件系统访问：主要是要逃过沙箱<br>打印作业的获取：我们可以hook任意的PostScript操作<br>证书泄露<h1 id="将来"><a href="#将来" class="headerlink" title="将来"></a>将来</h1>Google GCP<br>PDF converter<br>固件篡改攻击：大部分厂商的固件都是用PJL命令安装的<br>中间人攻击</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/14/PRET-tool/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1264,7 +1597,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1283,7 +1616,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1338,7 +1673,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">19</span>
+                      
+                    
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
