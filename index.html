@@ -369,7 +369,7 @@
                 
               
 
-              <time title="创建时间：2019-06-04 14:13:48 / 修改时间：20:39:56" itemprop="dateCreated datePublished" datetime="2019-06-04T14:13:48+08:00">2019-06-04</time>
+              <time title="创建时间：2019-06-04 14:13:48 / 修改时间：20:44:30" itemprop="dateCreated datePublished" datetime="2019-06-04T14:13:48+08:00">2019-06-04</time>
             
 
             
@@ -427,33 +427,17 @@
 
       
         
+          <h1 id="进入网络"><a href="#进入网络" class="headerlink" title="进入网络"></a>进入网络</h1><p>这一章讲的是如何攻破一台服务器，以及攻破之后的内网移动。</p>
+<p>讲到的工具比较多，并且都比较实用，最后还提供三台虚拟机，以供实验，可以多看看。</p>
+          <!--noindex-->
           
-            <h1 id="进入网络"><a href="#进入网络" class="headerlink" title="进入网络"></a>进入网络</h1><h2 id="密码喷洒攻击（Password-Spray-Attack）"><a href="#密码喷洒攻击（Password-Spray-Attack）" class="headerlink" title="密码喷洒攻击（Password Spray Attack）"></a>密码喷洒攻击（Password Spray Attack）</h2><p>利用社交网络或其他钓鱼方法收集多个用户ID，用一个密码尝试多个用户ID。通常情况下，至少有一个用户使用简单的密码，如12345678甚至是 p@ssw0rd。</p>
-<blockquote>
-<p>密码喷洒VS密码爆破：密码爆破是用多个密码尝试破解同一个ID;密码喷洒攻击是用一个密码来尝试多个用户ID</p>
-</blockquote>
-<p>工具：<code>Spray</code> <a href="https://github.com/sensepost/ruler" target="_blank" rel="noopener">Ruler</a></p>
-<p>方法1：获取某用户的email身份凭证，阅读邮件，向某一易攻破用户发送恶意邮件，脚本:<a href="https://github.com/O365/python-o365" target="_blank" rel="noopener">https://github.com/O365/python-o365</a></p>
-<h2 id="网络移动"><a href="#网络移动" class="headerlink" title="网络移动"></a>网络移动</h2><h2 id="攻破第一台主机后"><a href="#攻破第一台主机后" class="headerlink" title="攻破第一台主机后"></a>攻破第一台主机后</h2><h3 id="用于信息查询的脚本：RTFM-py"><a href="#用于信息查询的脚本：RTFM-py" class="headerlink" title="用于信息查询的脚本：RTFM.py"></a>用于信息查询的脚本：<a href="https://github.com/leostat/rtfm" target="_blank" rel="noopener">RTFM.py</a></h3><p>获取网络信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -anop | findstr LISTEN</span><br><span class="line">net group “Domain Admins” /domain</span><br></pre></td></tr></table></figure></p>
-<p>系统主机信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sysinfo</span><br><span class="line">Get-WmiObject -class win32 operatingsystem | select -property * | exportcsv c:\temp\os.txt</span><br><span class="line">wmic qfe get Caption，Description，HotFixID，InstalledOn</span><br></pre></td></tr></table></figure></p>
-<p>简单的文件搜索<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dir /s password</span><br><span class="line">findstr /s /n /i /p foo *</span><br><span class="line">findstr /si pass *.txt | *.xml | *.ini</span><br></pre></td></tr></table></figure></p>
-<h3 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h3><p>从普通用户到高权限帐户</p>
-<p>Metasploit </p>
-<h3 id="从内存中提取明文凭据"><a href="#从内存中提取明文凭据" class="headerlink" title="从内存中提取明文凭据"></a>从内存中提取明文凭据</h3><ul>
-<li>在 Windows 10之前，以本地管理员的身份在主机系统上运行 Mimikatz（Empire的一个模块） 的话是允许攻击者从 lsass（本地安全机构子系统服务）中提取明文密码的。</li>
-<li>Mimikittenz：利用 Windows 函数 ReadProcessMemory()来提取来自各种目标进程（如浏览器）的密码，并输出纯文本</li>
-</ul>
-<h3 id="创建一条攻击线路"><a href="#创建一条攻击线路" class="headerlink" title="创建一条攻击线路"></a>创建一条攻击线路</h3><p><a href="https://github.com/BloodHoundAD/BloodHound" target="_blank" rel="noopener">BloodHound</a></p>
-<p>攻击者红队可以使用 Bloodhound 轻松识别高度复杂的攻击路径，防御者蓝队可以使用 Sharphound 来识别和消除对应的的攻击路径。</p>
-<p>Bloodhound/Sharphound 的工作原理是在受害者系统上运行一个 Ingestor，然后为用户、组和主机查询 AD（类似于我们以前手工做的）。然后，Ingestor 将尝试连接到每个系统以枚举登录的用户、会话和权限。当然，这个动静会很大。对于采用默认设置（可以修改）的中型企业网站，连接到每个主机系统和使用 Sharphound 查询信息的时间可能不到10分钟。注意，因为这会接触到网络上每个加入域的系统，所以它可能会让你被发现。Bloodhound/Sharphound 中有一个秘密选项，它只查询 Active Directory，不连接到每个主机系统，但是输出结果非常有限。</p>
-<h3 id="离开初始主机"><a href="#离开初始主机" class="headerlink" title="离开初始主机"></a>离开初始主机</h3><p>现在你已经找到了将要移动到的潜在路径，那么获得这些系统的代码执行的选项是什么？最基本的方法是使用我们当前的有 Active Directory 权限的用户以获得对另一个系统的控制权，举个例子，一个经理可以完全访问其下属的计算机，一个拥有多个具有管理权限的会议/实验组计算机，他们的内部系统配置错误，或者发现有人手动将用户添加到该计算机上的本地管理组。这都是普通用户可以拥有远程访问到网络上的其他工作站的可能的一些方式。一旦攻陷了一台目标机器，我们既可以获取 Bloodhound 的结果，也可以重新扫描网络以查看我们在哪些机器上具有本地访问权限：</p>
-<ul>
-<li>Empire 模块:<br>** situational_awareness/network/powerview/find_localadmin_access</li>
-<li>Metasploit 模块：<a href="http://bit.ly/2JJ7ILb" target="_blank" rel="noopener">http://bit.ly/2JJ7ILb</a><br>Empire 的 find_localadmin_access 将查询 Active Directory 中的所有主机名并尝试连接到它们。这绝对是一个会造成很大动静的工具，因为它需要连接到每个主机并且验证它是否是本地管理员。</li>
-</ul>
-<h3 id="利用VPS在内网横向移动"><a href="#利用VPS在内网横向移动" class="headerlink" title="利用VPS在内网横向移动"></a>利用VPS在内网横向移动</h3><h3 id="在linux中横向移动"><a href="#在linux中横向移动" class="headerlink" title="在linux中横向移动"></a>在linux中横向移动</h3><p>Linux信息收集：<br><code>LinEnum</code>： <a href="https://github.com/rebootuser/linenum" target="_blank" rel="noopener">https://github.com/rebootuser/linenum</a><br><code>linux-exploit-suggester</code>:<a href="https://github.com/mzet-/linux-exploit-suggester" target="_blank" rel="noopener">https://github.com/mzet-/linux-exploit-suggester</a></p>
-
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/06/04/HackerPlaybook-chapter4/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
           
+          <!--/noindex-->
         
       
     </div>
