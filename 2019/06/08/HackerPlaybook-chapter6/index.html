@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="欢歌笑语">
 <meta property="og:description" content="物理访问攻击讲的是物理攻击，有一点点像特工。。。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-08T14:20:34.049Z">
+<meta property="og:updated_time" content="2019-06-08T14:24:30.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HackerPlaybook-chapter6">
 <meta name="twitter:description" content="物理访问攻击讲的是物理攻击，有一点点像特工。。。">
@@ -371,7 +371,7 @@
                 
               
 
-              <time title="创建时间：2019-06-08 21:32:45 / 修改时间：22:20:34" itemprop="dateCreated datePublished" datetime="2019-06-08T21:32:45+08:00">2019-06-08</time>
+              <time title="创建时间：2019-06-08 21:32:45 / 修改时间：22:24:30" itemprop="dateCreated datePublished" datetime="2019-06-08T21:32:45+08:00">2019-06-08</time>
             
 
             
@@ -436,13 +436,15 @@
 <p>LAN Turtle 首先通过端口 443 外连到 VPN，然后作为服务器返回到我们的 OpenVPN 。从我们用来做攻击的 Kali 机器中，我们也必须登录进 VPN 服务器。一旦 LAN Turtle 和我们的攻击者机器都通过VPN连接到我们的服务器中，我们就可以把流量从 LAN Turtle 转发到攻击机器来进行扫描或漏洞利用。</p>
 <h2 id="Bash-Bunny"><a href="#Bash-Bunny" class="headerlink" title="Bash Bunny"></a>Bash Bunny</h2><p><code>Rubber Ducky</code>: 模拟HID设备（如键盘）来存储命令。对红队成员而言，Rubber Ducky 仍然是个不错的工具，因为它可以加速PowerShell命令的传递，用于社会工程学攻击，并且可以在没有键盘但有 USB 插槽的柜台系统（如 ATM 机、自动售货机等）上做出入侵操作。</p>
 <p><code>Bash Bunny</code>: <code>Rubber Ducky</code>的升级版本。它不仅可以执行 HID 攻击（HID 是 Human Interface Device的缩写，意思是人机接口设备），还有许多其他操作。Bash Bunny 有两个独立的设置选项来分别保存对 BunnyTap 和 QuickCreds 这两种攻击的设置（以及一个额外的管理设置）。这些 payload 可以执行攻击来窃取凭证、进行网络钓鱼、执行 Ducky 攻击、运行 PowerShell 命令、执行扫描和侦察、执行 Metasploit autopwn 等。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HID Attack 是最近几年流行的一类攻击方式。HID 是 Human Interface Device的缩写，意思是人机接口设备。它是对鼠标、键盘、游戏手柄这一类可以操控电脑设备的统称。</span><br><span class="line">由于电脑对这类设备缺少严格的检测措施，只是简单的识别设备类型，就允许设备对电脑进行各项操作。所以，通过修改篡改设备反馈信息，就可以很轻松的让电脑将其他设备误认为 HID 设备，从而获取控制权限。尤其是 USB 和蓝牙这类即插即用接口出现，导致 HID Attack 成为重要方式。例如，Bad USB 就是 USB 类攻击的典型代表。</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>HID Attack 是最近几年流行的一类攻击方式。HID 是 Human Interface Device的缩写，意思是人机接口设备。它是对鼠标、键盘、游戏手柄这一类可以操控电脑设备的统称。<br>由于电脑对这类设备缺少严格的检测措施，只是简单的识别设备类型，就允许设备对电脑进行各项操作。所以，通过修改篡改设备反馈信息，就可以很轻松的让电脑将其他设备误认为 HID 设备，从而获取控制权限。尤其是 USB 和蓝牙这类即插即用接口出现，导致 HID Attack 成为重要方式。例如，Bad USB 就是 USB 类攻击的典型代表。</p>
+</blockquote>
 <h2 id="BunnyTap"><a href="#BunnyTap" class="headerlink" title="BunnyTap"></a>BunnyTap</h2><ul>
 <li>通过USB(或 Thunderbolt )模拟以太网设备。</li>
 <li>劫持所有来自机器的网络流量(尽管是通过低优先级或未知的网络接口)</li>
 <li>后门和远程访问权限即使在设备被移除且攻击者离开后仍然存在</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">从一次物理评估的角度来看，你进入他们的办公室，在每台机器上插上 Bash Bunny，然后等待大约2分钟。Bash Bunny 会让电脑中的所有流量都走 Bash Bunny 转发。如果他们有一个打开并且活动的浏览器（如广告或任何定期更新的页面），BunnyTap 将启动并向所有 Alexa Top 100,0000 网站发出请求。此时，受害者用户若登录到这些站点中的任何一个，BunnyTap 将捕获受害者的所有 cookie。现在，我们可以将这些 cookie 发回到自己的计算机上，把我们的 cookie 替换成他们的，这样即可在不知道他们密码的情况下，冒充他们的身份进入网站。</span><br></pre></td></tr></table></figure>
+<p>从一次物理评估的角度来看，你进入他们的办公室，在每台机器上插上 Bash Bunny，然后等待大约2分钟。Bash Bunny 会让电脑中的所有流量都走 Bash Bunny 转发。如果他们有一个打开并且活动的浏览器（如广告或任何定期更新的页面），BunnyTap 将启动并向所有 Alexa Top 100,0000 网站发出请求。此时，受害者用户若登录到这些站点中的任何一个，BunnyTap 将捕获受害者的所有 cookie。现在，我们可以将这些 cookie 发回到自己的计算机上，把我们的 cookie 替换成他们的，这样即可在不知道他们密码的情况下，冒充他们的身份进入网站。</p>
 <h2 id="KonBoot"><a href="#KonBoot" class="headerlink" title="KonBoot"></a>KonBoot</h2><p><code>KonBoot</code>在未加密的机器上工作时，可以从U盘启动并覆写本地管理员的密码。尽管这个操作需要完整地重启客户机，但一旦重启完成，你就可以不用借助任何凭证的访问被攻击的机器。</p>
 <p>但是，KonBoot的使用有两个缺点：1.不能在加密的机器上运行；2.需要重启机器</p>
 <p>那么如何从被锁定的系统中获取信息，以访问网络上的其他内容或者取得哈希、身份凭据？————使用 <code>Bash Bunny</code> 。</p>
