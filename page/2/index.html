@@ -324,6 +324,180 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/21/firmware-paper/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wangxy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢歌笑语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/21/firmware-paper/" class="post-title-link" itemprop="url">firmware-paper</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-21 18:17:58" itemprop="dateCreated datePublished" datetime="2018-11-21T18:17:58+08:00">2018-11-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-22 21:47:56" itemprop="dateModified" datetime="2018-11-22T21:47:56+08:00">2018-11-22</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="实现固件镜像的自动分类和嵌入式设备的识别-2017"><a href="#实现固件镜像的自动分类和嵌入式设备的识别-2017" class="headerlink" title="实现固件镜像的自动分类和嵌入式设备的识别-2017"></a>实现固件镜像的自动分类和嵌入式设备的识别-2017</h2><p>Towards Automated Classification of Firmware Images and Identification of Embedded Devices 2017<br>Andrei Costin</p>
+<p>主要有两个方面的内容：<br>1.固件的分类<br>2.web页面指纹的识别</p>
+<p>亮点：<br>机器学习<br>提取特征的方式</p>
+<p>固件文件的数据库子集上使用受监督的机器学习。首先将其他类型文件中的固件映像分开，然后根据供应商或设备类型对固件映像进行分类。接下来，我们物理设备和模拟设备的嵌入式Web界面指纹。这允许识别连接到网络的启用Web的设备。在某些情况下，这种互补方法允许将启用Web的在线设备与设备上运行的相应固件包进行逻辑链接。<br>数据集：我们使用了来自3个供应商的27个固件映像的模拟Web界面，还使用了来自2个供应商的4个物理设备<br>固件特征：固件文件大小、固件文件内容、固件文件字符串、固件文件内容的模糊哈希<br>web特征：网站地图、HTTP有限状态机、HTML内容和HTTP标头的加密哈希、HTML内容和HTTP标头的模糊散列</p>
+<h2 id="联网设备主动分析——分析联网的摄像头的版本以及服务"><a href="#联网设备主动分析——分析联网的摄像头的版本以及服务" class="headerlink" title="联网设备主动分析——分析联网的摄像头的版本以及服务"></a>联网设备主动分析——分析联网的摄像头的版本以及服务</h2><p>Active Profiling of Physical Devices at Internet Scale</p>
+<p>内容：<br>1.提取物理设备信息，例如设备类型，运行服务及其IP<br>2.我们首先扫描大量的Internet空间来发现实时主机，然后采用应用层协议的横幅抓取来提取物理设备。如果识别出物理设备，则时钟偏差将设备ID与设备硬件的微观精度偏差分开。我们工作的一个关键设计目标是可扩展性。</p>
+<p>贡献：<br>1.我们已经提出了可扩展的物理设备分析框架。这是第一次大规模提取详细设备信息（ID，类型，运行服务）的工作。<br>2.我们已经实现了一个原型系统来提取网络摄像头。我们的实验结果表明，可以实时有效地收集网络摄像头信息。</p>
+<h2 id="自动大规模分析固件—2016"><a href="#自动大规模分析固件—2016" class="headerlink" title="自动大规模分析固件—2016"></a>自动大规模分析固件—2016</h2><p>Automated Dynamic Firmware Analysis at Scale: A Case Study on Embedded Web Interfaces<br>问题：1.静态分析工具通常是为特定的技术设计的，并且它们中的许多集中在一些常用的环境（例如，PHP），而剩下的“未被覆盖”</p>
+<pre><code>2. 基于各种计算体系结构和硬件设计，创建能够为各种设备完美地模拟firmware映像的环境是具有挑战性的
+</code></pre><p>可能解决的原因：1.一个观察是，在基于Linux的嵌入式系统中，与硬件的交互通常从内核执行，并且它们的web接口通常不与硬件直接交互。<br>使用1925个解压缩的firmware映像，其中包含嵌入式Web接口，模拟固件后，使用静态和动态分析工具自动分析firmware中的Web接口，使用Arachni、Zed攻击代理(ZAP)和w3af进行动态分析。<br>57%的固件使用CGI</p>
+<p>完美的仿真<br>通用内核的仿真<br>带有通用内核和文件系统系统的固件chroot：由于缺乏原始内核，仍然可能依赖于完整的通用系统（针对相同的CPU体系结构），然后将该系统用作firmware分析的基础。在我们的框架中，我们使用Debian Squeeze 的预编译版本。从这个通用系统，我们启动解压的firmware并执行shell（/bin/sh）或init二进制文件（例如/sbin/init）。最后，我们启动Web服务器的二进制文件以及Web接口文档根和Web配置。<br>数据集的选择：1925—1580—488—246<br>首先，我们选择成功解压的固件，这些固件都是基于Linux的系统，我们可以通过QEMU进行本地仿真和chroot。其次，选择清楚地包含web服务器二进制文件（例如，httpd、lighttpd）和典型的web配置文件（例如，boa.conf、lighttpd.conf）。除此之外，选择有与web接口相关的服务器端或客户端代码（例如，HTML、JavaScript、PHP、Perl）的固件。<br>方法：<br><em>首先需要找到根文件系统，通过搜索关键目录和关键文件</em>。一旦我们发现了解压的firmware中的目录相关的此类文件和文件夹，我们就选择该特定目录作为根文件系统点。也有一些情况下，很难或不可能检测到根文件系统。一个可能的原因是某些firmware更新只是局部的，并不提供完整的系统。我们提取每个检测到的根filesystem，并将其打包为一个独立的根filesystem，作为仿真的候选。</p>
+<p>对提取的文件系统进行筛选，剔除没能成功解压的。</p>
+<h2 id="用机器学习实现固件类型分析"><a href="#用机器学习实现固件类型分析" class="headerlink" title="用机器学习实现固件类型分析"></a>用机器学习实现固件类型分析</h2><p>Toward Firmware-Type Analysis Using Machine Learning Techniques</p>
+<p>内容：<br>1.binwalk根据magic字符进行系统处理，有限制<br>2.如果存在固件中的签名没有在比较文件中，则无法确定类型。另外，存在在比较签名的过程中发生错误检测的情况，指示与实际类型不同的类型。<br>3.提议用机器学习解决：没有看懂，感觉也没进行实验</p>
+<h2 id="识别固件中的二进制版本"><a href="#识别固件中的二进制版本" class="headerlink" title="识别固件中的二进制版本"></a>识别固件中的二进制版本</h2><p>PANDORA<br>内容:<br>1.离线识别：只有固件存在<br>2.通过利用二进制文件中的版本字符串来获取 版本信息<br>3.对动态生成的字符串进行CFG的生成，从而恢复字符串</p>
+<h2 id="识别嵌入式web页面的指纹，即识别联网的嵌入式设备"><a href="#识别嵌入式web页面的指纹，即识别联网的嵌入式设备" class="headerlink" title="识别嵌入式web页面的指纹，即识别联网的嵌入式设备"></a>识别嵌入式web页面的指纹，即识别联网的嵌入式设备</h2><p>内容：<br>1.提取文件系统并运行<br>2.生成DOM树，从而产生&lt;请求，响应&gt;对<br>3.与web页面的&lt;请求，响应&gt;对比较。</p>
+<h2 id="识别同源二进制固件"><a href="#识别同源二进制固件" class="headerlink" title="识别同源二进制固件"></a>识别同源二进制固件</h2><p>提取字符串进行静态分析，过滤字符串，hash签名生成</p>
+<h2 id="大规模分析固件-www-firmware-re"><a href="#大规模分析固件-www-firmware-re" class="headerlink" title="大规模分析固件 www.firmware.re"></a>大规模分析固件 <a href="http://www.firmware.re" target="_blank" rel="noopener">www.firmware.re</a></h2><p>A Large-Scale Analysis of the Security of Embedded Firmwares</p>
+<h2 id="顶尖人物"><a href="#顶尖人物" class="headerlink" title="顶尖人物"></a>顶尖人物</h2><p>Andrei Costin<br><a href="http://www.firmware.re项目的创始人" target="_blank" rel="noopener">www.firmware.re项目的创始人</a><br>研究了postscript</p>
+<p>Muller<br>开发了PRET<br>进一步研究postscript在web应用的攻击面</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/19/auto-exploit-paper/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1699,172 +1873,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/11/hello-world/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wangxy">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="欢歌笑语">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/11/11/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-11-11 21:18:45" itemprop="dateCreated datePublished" datetime="2018-11-11T21:18:45+08:00">2018-11-11</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-12 13:20:18" itemprop="dateModified" datetime="2018-11-12T13:20:18+08:00">2018-11-12</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/11/11/hello-world/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1906,7 +1919,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
