@@ -105,7 +105,7 @@
 <meta property="og:description" content="简单了解一下AlphaGo的原理和用到的算法">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/06/13/Game-Theory-and-AlphaGo/picture/alphago_model.JPG">
-<meta property="og:updated_time" content="2019-06-14T03:23:18.172Z">
+<meta property="og:updated_time" content="2019-06-14T06:52:46.897Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Game Theory and AlphaGo">
 <meta name="twitter:description" content="简单了解一下AlphaGo的原理和用到的算法">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-14 11:23:18" itemprop="dateModified" datetime="2019-06-14T11:23:18+08:00">2019-06-14</time>
+                <time title="修改时间：2019-06-14 14:52:46" itemprop="dateModified" datetime="2019-06-14T14:52:46+08:00">2019-06-14</time>
               
             
           </span>
@@ -462,7 +462,7 @@
 <p>策略网络（Policy Network）是基于全局特征和深度卷积网络（CNN）训练出来的。其主要作用是给定当前盘面状态作为输入，输出下一步棋在棋盘其它空地上的落子概率。</p>
 <h2 id="Fast-Rollout-Policy"><a href="#Fast-Rollout-Policy" class="headerlink" title="Fast Rollout Policy"></a>Fast Rollout Policy</h2><p>利用局部特征和线性模型训练出来的快速走棋策略（Rollout Policy)。策略网络速度较慢，但精度较高；快速走棋策略反之。</p>
 <h2 id="强化学习的Policy-Networks"><a href="#强化学习的Policy-Networks" class="headerlink" title="强化学习的Policy Networks"></a>强化学习的Policy Networks</h2><p>为了进一步提高policy network的对弈能力，Huang等人采用一种policy gradient reinforcement learning的技术，训练了一个RL policy network：pρ。这个网络的结构与SL policy network的网络结构相同，依然是一个输出为给定状态下落子概率的卷积神经网络。网络的参数被初始化为pσ的参数；接下来，通过不断地自我对弈（与历史版本），网络的权重向着收益最大化的方向进化。此时，网络的学习目标不再是模拟人类的走法，而是更为终极的目标：赢棋。</p>
-<h2 id="强化学习的Value-Networks"><a href="#强化学习的Value-Networks" class="headerlink" title="强化学习的Value Networks"></a>强化学习的Value Networks</h2><p>一个能快速预估棋面价值（棋势）的Value Network。</p>
+<h2 id="强化学习的Value-Networks"><a href="#强化学习的Value-Networks" class="headerlink" title="强化学习的Value Networks"></a>强化学习的Value Networks</h2><p>一个能快速预估棋面价值（棋势）的Value Network。数据的来源是上面self play的棋局。</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><blockquote>
 <p>第一阶段：利用3万多幅专业棋手对局的棋谱来训练两个网络。一个是基于全局特征和深度卷积网络（CNN）训练出来的策略网络（Policy Network）。其主要作用是给定当前盘面状态作为输入，输出下一步棋在棋盘其它空地上的落子概率。另一个是利用局部特征和线性模型训练出来的快速走棋策略（Rollout Policy)。策略网络速度较慢，但精度较高；快速走棋策略反之。</p>
 </blockquote>
