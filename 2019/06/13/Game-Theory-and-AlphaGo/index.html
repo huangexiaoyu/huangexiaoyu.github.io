@@ -105,7 +105,7 @@
 <meta property="og:description" content="简单了解一下AlphaGo的原理和用到的算法">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/.com//alphago_model.JPG">
-<meta property="og:updated_time" content="2019-06-14T08:42:07.172Z">
+<meta property="og:updated_time" content="2019-06-14T08:43:51.699Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Game Theory and AlphaGo">
 <meta name="twitter:description" content="简单了解一下AlphaGo的原理和用到的算法">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-14 16:42:07" itemprop="dateModified" datetime="2019-06-14T16:42:07+08:00">2019-06-14</time>
+                <time title="修改时间：2019-06-14 16:43:51" itemprop="dateModified" datetime="2019-06-14T16:43:51+08:00">2019-06-14</time>
               
             
           </span>
@@ -490,8 +490,9 @@
 </li>
 <li><p>推演和判定 (Expand and Evaluate)。AlphaGo Zero会根据前面的落子规则不断的落子，这就相当于棋手在脑海中进行推演。但是围棋的搜索空间即使对于计算机来说也是太大，alphago zero只会推演（仿真）到一定步数就停止了。假设最后的布局是s’, 那么AlphaGo Zero会调用深度神经网络来预测这局推演结束时自己的胜率v(s’) 。这样的推演过程会进行多次。</p>
 </li>
+<li><p>复盘 (Backup)。等一次推演结束后，AlphaGo Zero会根据推演的结果更新自己的知识。</p>
+</li>
 </ul>
-<p>+复盘 (Backup)。等一次推演结束后，AlphaGo Zero会根据推演的结果更新自己的知识。</p>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
 <li>Mastering the game of Go with deep neural networks and tree search.pdf</li>
 <li><a href="https://www.cnblogs.com/iloveai/p/5470981.html" target="_blank" rel="noopener">https://www.cnblogs.com/iloveai/p/5470981.html</a></li>
@@ -545,6 +546,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/15/HackerPlaybook-chapter7/" rel="prev" title="HackerPlaybook-chapter7">
+                HackerPlaybook-chapter7 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -613,7 +618,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-count">23</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
