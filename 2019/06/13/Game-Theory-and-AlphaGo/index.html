@@ -105,7 +105,7 @@
 <meta property="og:description" content="简单了解一下AlphaGo的原理和用到的算法">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/06/13/Game-Theory-and-AlphaGo/alphago_model.JPG">
-<meta property="og:updated_time" content="2019-06-20T13:50:15.920Z">
+<meta property="og:updated_time" content="2019-06-20T13:51:38.948Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Game Theory and AlphaGo">
 <meta name="twitter:description" content="简单了解一下AlphaGo的原理和用到的算法">
@@ -390,7 +390,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-20 21:50:15" itemprop="dateModified" datetime="2019-06-20T21:50:15+08:00">2019-06-20</time>
+                <time title="修改时间：2019-06-20 21:51:38" itemprop="dateModified" datetime="2019-06-20T21:51:38+08:00">2019-06-20</time>
               
             
           </span>
@@ -457,7 +457,6 @@
 <h1 id="AlphaGo"><a href="#AlphaGo" class="headerlink" title="AlphaGo"></a>AlphaGo</h1><p>AlphaGo训练了两个卷积神经网络来帮助MCTS算法制定策略：用于评估局面的value network，和用于决策的policy network。</p>
 <p>在MCTS的框架下引入两个卷积神经网络policy network和value network以改进纯随机的Monte Carlo模拟，并借助supervised learning和reinforcement learning（解决 decision making 问题，即自动进行决策，并且可以做连续决策）训练。</p>
 <p><img src="/2019/06/13/Game-Theory-and-AlphaGo/alphago_model.JPG" alt="alphamodel"></p>
-<!--<img src="/2019/06/13/Game-Theory-and-AlphaGo/alphago_model.JPG" title="alphamodel">–&gt;
 <p>通常，人们把alphago分为离线学习和在线对弈两个过程。</p>
 <h2 id="有监督学习的Policy-Networks"><a href="#有监督学习的Policy-Networks" class="headerlink" title="有监督学习的Policy Networks"></a>有监督学习的Policy Networks</h2><p>有监督的Policy Network用来模拟人类专家的走子。SL policy network是一个卷积神经网络；其输出层是一个Softmax分类器，用来计算在给定的棋面状态s下每一个位置的落子概率p(a|s)。</p>
 <p>策略网络（Policy Network）是基于全局特征和深度卷积网络（CNN）训练出来的。其主要作用是给定当前盘面状态作为输入，输出下一步棋在棋盘其它空地上的落子概率。</p>
@@ -496,11 +495,11 @@
 </ul>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
 <li>Mastering the game of Go with deep neural networks and tree search.pdf</li>
-<li><a href="https://www.cnblogs.com/iloveai/p/5470981.html">https://www.cnblogs.com/iloveai/p/5470981.html</a></li>
-<li><a href="https://blog.csdn.net/quicmous/article/details/82711640">https://blog.csdn.net/quicmous/article/details/82711640</a></li>
-<li><a href="https://www.jianshu.com/p/6ecc72c39b84">https://www.jianshu.com/p/6ecc72c39b84</a></li>
+<li><a href="https://www.cnblogs.com/iloveai/p/5470981.html" target="_blank" rel="noopener">https://www.cnblogs.com/iloveai/p/5470981.html</a></li>
+<li><a href="https://blog.csdn.net/quicmous/article/details/82711640" target="_blank" rel="noopener">https://blog.csdn.net/quicmous/article/details/82711640</a></li>
+<li><a href="https://www.jianshu.com/p/6ecc72c39b84" target="_blank" rel="noopener">https://www.jianshu.com/p/6ecc72c39b84</a></li>
 </ul>
--->
+
       
     </div>
 
@@ -741,7 +740,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蒙特卡洛树搜索算法——MCTS"><span class="nav-number">1.</span> <span class="nav-text">蒙特卡洛树搜索算法——MCTS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AlphaGo"><span class="nav-number">2.</span> <span class="nav-text">AlphaGo</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#蒙特卡洛树搜索算法——MCTS"><span class="nav-number">1.</span> <span class="nav-text">蒙特卡洛树搜索算法——MCTS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AlphaGo"><span class="nav-number">2.</span> <span class="nav-text">AlphaGo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#有监督学习的Policy-Networks"><span class="nav-number">2.1.</span> <span class="nav-text">有监督学习的Policy Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fast-Rollout-Policy"><span class="nav-number">2.2.</span> <span class="nav-text">Fast Rollout Policy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强化学习的Policy-Networks"><span class="nav-number">2.3.</span> <span class="nav-text">强化学习的Policy Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#强化学习的Value-Networks"><span class="nav-number">2.4.</span> <span class="nav-text">强化学习的Value Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">2.5.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在线对弈"><span class="nav-number">2.6.</span> <span class="nav-text">在线对弈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#增强版——AlphaGo-Zero"><span class="nav-number">3.</span> <span class="nav-text">增强版——AlphaGo Zero</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MCTS："><span class="nav-number">3.1.</span> <span class="nav-text">MCTS：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>
