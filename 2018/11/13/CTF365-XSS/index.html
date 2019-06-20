@@ -104,16 +104,16 @@
 <meta property="og:site_name" content="欢歌笑语">
 <meta property="og:description" content="对CTF365的XSS challenge进行记录">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/.com//xsstest02.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//xsstest03.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//xsstest04.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//xsstest05.jpg">
-<meta property="og:image" content="http://yoursite.com/.com//xsstest06.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest02.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest03.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest04.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest05.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest06.jpg">
 <meta property="og:updated_time" content="2018-11-13T13:08:22.567Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CTF365的XSS挑战">
 <meta name="twitter:description" content="对CTF365的XSS challenge进行记录">
-<meta name="twitter:image" content="http://yoursite.com/.com//xsstest02.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/13/CTF365-XSS/xsstest02.jpg">
 
 
 
@@ -423,23 +423,23 @@
 <h1 id="第二关"><a href="#第二关" class="headerlink" title="第二关"></a>第二关</h1><p>和前一关一样，进行测试，发现增加了一些关键词的过滤，如<code>onerror</code> -&gt; <code>o.err</code> , <code>onclick</code>-&gt;<code>o.ick</code></p>
 <p>这两个都没有相似性，感觉应该是采用黑名单的过滤。</p>
 <p>测试<code>onmousemove</code>event,<code>&lt;img src=x onmousemove=alert(1)&gt;</code>,成功！</p>
-<p><img src="/.com//xsstest02.jpg" alt="xsstest02"></p>
+<p><img src="/2018/11/13/CTF365-XSS/xsstest02.jpg" alt="xsstest02"></p>
 <h1 id="第三关"><a href="#第三关" class="headerlink" title="第三关"></a>第三关</h1><p>这一关感觉要比上一关简单啊。。。也是过滤，只不过是把这些全都过滤成空白字符串’’，所以把<code>onerror</code>插入<code>onerror</code>中，构成<code>ononerrorerror</code>，中间的<code>onerror</code>就被过滤成’’，留下<code>onerror</code></p>
 <p><code>&lt;img src=x ononerrormousemove=alert(1)&gt;</code></p>
-<p><img src="/.com//xsstest03.jpg" alt="xsstest03"></p>
+<p><img src="/2018/11/13/CTF365-XSS/xsstest03.jpg" alt="xsstest03"></p>
 <h1 id="第四关"><a href="#第四关" class="headerlink" title="第四关"></a>第四关</h1><p>和之前的模式不同，这道题是要求输入post的url，然后会在下面显示出来。</p>
 <p>输入和输出如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http://&quot; ——&gt; &lt;a href=&quot;http://&quot; &quot;=&quot;&quot; alt=&quot;http://&quot;&gt;http://&quot;&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">不输入 ——&gt; &lt;a href=&quot;https://www.owasp.org/index.php/OWASP_Security_Shepherd&quot; alt=&quot;OWASP Security Shepherd&quot;&gt;https://www.owasp.org/index.php/OWASP_Security_Shepherd&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">http://&quot;alert(1) ——&gt; &lt;a href=&quot;http://&quot; alert&amp;#x28;1&amp;#x29;&quot;=&quot;&quot; alt=&quot;http://&quot;&gt;http://&quot;alert(1)&lt;/a&gt;</span><br></pre></td></tr></table></figure>
 <p>也就是说，过滤了特殊字符<code>&lt;</code> <code>&gt;</code> <code>&quot;</code>等，还过滤了on事件，并将on转换成unicode编码。</p>
 <p>在这里浪费了一些时间。。。其实应该很快就想到，过滤了小写，但是没有过滤大写啊！！</p>
 <p>payload：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http&quot;Onerror=alert(1)</span><br></pre></td></tr></table></figure></p>
-<p><img src="/.com//xsstest04.jpg" alt="xsstest04"></p>
+<p><img src="/2018/11/13/CTF365-XSS/xsstest04.jpg" alt="xsstest04"></p>
 <h1 id="第五关"><a href="#第五关" class="headerlink" title="第五关"></a>第五关</h1><p>这一关过的稀里糊涂。。。和第四关差不多，多了一条是url必须是url的模样。</p>
 <p>先试了一下第四关的payload，发现出现了onerror还是被<code>&quot;&quot;</code>框起来了，于是就又加了一个<code>&quot;</code>,然后就成功了。</p>
 <p>payload：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:\\123.com&quot;&quot;onerror=alert(1)</span><br></pre></td></tr></table></figure></p>
-<p><img src="/.com//xsstest05.jpg" alt="xsstest05"></p>
+<p><img src="/2018/11/13/CTF365-XSS/xsstest05.jpg" alt="xsstest05"></p>
 <h1 id="第六关"><a href="#第六关" class="headerlink" title="第六关"></a>第六关</h1><p>同样的payload，又过了这一关。。。</p>
-<p><img src="/.com//xsstest06.jpg" alt="xsstest06"></p>
+<p><img src="/2018/11/13/CTF365-XSS/xsstest06.jpg" alt="xsstest06"></p>
 <h1 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h1><p>没想到CTF365的XSS还是对萌新很友好的</p>
 
       
