@@ -324,6 +324,157 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/18/CSRF-info/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wangxy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢歌笑语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/11/18/CSRF-info/" class="post-title-link" itemprop="url">CSRF--《白帽子讲web安全》</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-18 18:21:02 / 修改时间：18:54:35" itemprop="dateCreated datePublished" datetime="2018-11-18T18:21:02+08:00">2018-11-18</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>CSRF：Cross Site Request Forgery，跨站请求伪造，伪造请求，诱导用户点击</p>
+<p>Third-party cookie：服务器在set-cookie时指定了Expire时间，只有到时间后cookie才会失效，如果浏览器从一个域的页面中要加载另一个域的资源，出于安全原因，某些浏览器会阻止third-party cookie的发送。这种cookie保存在本地。<br>session cookie：没有指定Expire时间，浏览器关闭后，即失效，保存在浏览器进程的内存空间中。</p>
+<p>P3P头</p>
+<h1 id="GET和POST问题"><a href="#GET和POST问题" class="headerlink" title="GET和POST问题"></a>GET和POST问题</h1><p>就一些表单来说，因为没有严格的区分GET和POST，所以可以用GET来请求。（比如php里的REQUEST方法可以用GET绕过）</p>
+<p>也可以通过JS自动提交</p>
+<h1 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h1><p>验证码</p>
+<p>不利于用户体验</p>
+<p>Referer Check</p>
+<p>Token：一致使用，不可预测性原则，对同时存在XSS的网站失效</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/15/paper-PRET/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1488,7 +1639,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

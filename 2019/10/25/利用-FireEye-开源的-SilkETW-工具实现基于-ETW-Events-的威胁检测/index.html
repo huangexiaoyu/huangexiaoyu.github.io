@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="原文地址：https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0  使用基于ETW和HELK的威胁检测——第一部分：安装SilkETW">
+<meta name="keywords" content="看雪翻译小组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用 FireEye 开源的 SilkETW 工具实现基于 ETW Events 的威胁检测">
+<meta property="og:url" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/index.html">
+<meta property="og:site_name" content="欢歌笑语">
+<meta property="og:description" content="原文地址：https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0  使用基于ETW和HELK的威胁检测——第一部分：安装SilkETW">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_4BO6zVzld3Dyd4wTvPVw-Q.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_Gu4Tv-Iw0DYbtp3lMgrXEQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_R1s-QtNnp4LlgoIpOnyuQg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_Ri3L7b9v7NgKIQ42rMwSXg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_t3gqRJ-iWmqxjd_unqgHgA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_TJNzINANmBVnhYl5Du0olQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_rg5lxywttrlPwl1shAYFzw.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_z4Xk4P-9OS8aUEJg6UgAOQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_HfHcaHDAEFerryt-PhIjSA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_rKoKCPKVKAXNiakIoVEgOA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_PN1HQNj-XxbriyZbJogkyA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_9dkHrj7ucKNpADd5jP9fsA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_bWuBOQm8ZGkAnPpGl7pdjw.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_RqWsPHZi4eYxtmT1LM0stA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_FE38sJbIR4_RS0DgFaP2-g.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1__nm6AjfTxoDrvpUnIxLN5A.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_DRD_rBsKNr-P1Jy52nQiKg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_oS4nWfYBAY9cf6ojZZ1rtA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_ZzZvC5E765-KltTxaQpLhg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_DTcO5kxj6_f6QDWCIJDpOQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_s_o5N0Ct9lJghUuawX5Jew.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_WlQoNZM_kFR4FFuiy7CeSQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_PgdHepALBXzfnBbkvPRUww.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_fH-4Wj8QFjay5koJokMzzw.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_26VLji8KObXGmvnqghwltw.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_stbrpP0myYxdUbhKRkDQug.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_hYLfJhLe_QH05cgl5JpHyg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_0E9nRCrjfgoGewqbqzSBwg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_oHHo-ba4v0HRW5PEsq61YA.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_cpfkFzOt04RJ1DiH6_8iaw.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_5NfTBbIAzKDRwLs35nB1eg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_H624rrShkq3hB2LDI-GWww.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_-vRj4zzG6dRf1UIZrUrNzQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_4ZtAkWq2qF2dU1WbwEAO_g.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_muBU-6x4Ru5Q9YSGs2wj6g.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_yhktdRrnmGm5xFCMqC_DJw.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_uxXa0wRJcVk0oURylJdsJg.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_c4uJf3dR6QV_03DUglQA-A.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_c0fCRiSb-q1Xr7gxgGG0QQ.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_BeIonS653zAn8F6uXa26yA.png">
+<meta property="og:updated_time" content="2019-11-01T13:12:29.830Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用 FireEye 开源的 SilkETW 工具实现基于 ETW Events 的威胁检测">
+<meta name="twitter:description" content="原文地址：https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0  使用基于ETW和HELK的威胁检测——第一部分：安装SilkETW">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_4BO6zVzld3Dyd4wTvPVw-Q.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>利用 FireEye 开源的 SilkETW 工具实现基于 ETW Events 的威胁检测 | 欢歌笑语</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">欢歌笑语</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">这是一个很好很好的人哦</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wangxy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢歌笑语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用 FireEye 开源的 SilkETW 工具实现基于 ETW Events 的威胁检测
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-10-25 19:40:54" itemprop="dateCreated datePublished" datetime="2019-10-25T19:40:54+08:00">2019-10-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-01 21:12:29" itemprop="dateModified" datetime="2019-11-01T21:12:29+08:00">2019-11-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>原文地址：<a href="https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0" target="_blank" rel="noopener">https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-1-installing-silketw-6eb74815e4a0</a></p>
+</blockquote>
+<p>使用基于ETW和HELK的威胁检测——第一部分：安装SilkETW</p>
+<a id="more"></a>
+<p>除<code>刺客信条</code>之外，我最喜欢做的事是识别新的数据源，这些新数据源可以在我进行研究时的分析提供更多背景信息。 从Windows环境的角度，多数情况下，在模拟实施对抗技术后产生的event日志都来自通过制定审计策略或运行<code>auditpol.exe</code>启用的源。即使Windows审计策略允许启用几个有用的事件，也请记住，这些只是Windows系统中所有可用监测的一部分。</p>
+<p>还有其他几种可用的数据源，但是无法通过审计策略轻松启用。但是，通过正确的工具和对Windows事件跟踪（ETW）概念的一点了解，他们很容易进行交互地探索。</p>
+<p>这篇文章是一个由四部分组成的系列文章的一部分，该系列文章将涉及ETW模型的基础知识，如何安装SilkETW，使用和汇总ETW事件，同时向您展示如何利用额外的监测技术检测Hunting ELK（HELK）的用例。</p>
+<p>在第一篇文章中，我将介绍ETW的基础知识，并安装鲁本·博南（@FuzzySec）的SilkETW项目。</p>
+<p>其他三个部分可以在以下链接中找到：</p>
+<ul>
+<li><a href="https://medium.com/threat-hunters-forge/threat-hunting-with-etw-events-and-helk-part-2-shipping-etw-events-to-helk-16837116d2f5" target="_blank" rel="noopener">使用ETW事件和HELK进行威胁检测—第2部分：将ETW事件发送到HELK</a></li>
+<li>使用ETW事件和HELK进行威胁检测-第3部分：检测用例</li>
+<li>使用ETW事件和HELK进行威胁检测-第4部分：ETW事件和刺客信条</li>
+</ul>
+<p>在我们开始谈论SilkETW之前，我认为从基础开始并重新认识ETW模型的一些关键概念非常重要。我还认为，了解如何为特定的ETWprovider手动启用事件跟踪以了解其机制很重要。</p>
+<h2 id="什么是ETW？"><a href="#什么是ETW？" class="headerlink" title="什么是ETW？"></a>什么是ETW？</h2><blockquote>
+<p>Event Tracing for Windows (ETW) 是一种高效的内核级跟踪工具，可以让您记录内核或应用程序定义的事件记录到日志文件。您可以实时或从日志文件使用事件，并使用它们来调试应用程序或确定应用程序中发生性能问题的位置。ETW使您可以动态地启用或禁用事件跟踪，从而使您可以在生产环境中执行详细的跟踪而无需重新启动计算机或应用程序。</p>
+</blockquote>
+<p>根据<a href="https://docs.microsoft.com/en-us/windows/win32/etw/about-event-tracing" target="_blank" rel="noopener">MS docs</a>，事件跟踪API分为三个不同的组件：</p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/etw/about-event-tracing#controllers" target="_blank" rel="noopener">Controller</a>，用于启动和停止事件跟踪会话并启用provider</li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/etw/about-event-tracing#providers" target="_blank" rel="noopener">Provider</a>，提供事件</li>
+<li><a href="https://docs.microsoft.com/en-us/windows/win32/etw/about-event-tracing#consumers" target="_blank" rel="noopener">Consumer</a>，处理事件</li>
+</ul>
+<p><a href="https://blogs.msdn.microsoft.com/ntdebugging/2009/08/27/part-1-etw-introduction-and-overview/" target="_blank" rel="noopener">Microsoft Ntdebugging</a>博客中的下图有助于了解每个组件之间的关系。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_4BO6zVzld3Dyd4wTvPVw-Q.png" alt=""></p>
+<h2 id="探索ETW组件"><a href="#探索ETW组件" class="headerlink" title="探索ETW组件"></a>探索ETW组件</h2><h3 id="Controllers"><a href="#Controllers" class="headerlink" title="Controllers"></a>Controllers</h3><p>诸如<a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/logman" target="_blank" rel="noopener">Logman</a>之类的工具是ETW模型中controller的一个很好的例子，因为它创建并管理<strong>事件跟踪会话</strong>和<strong>性能日志</strong>。另外，您可以使用Controller来查询每个组件（即Providers）的元数据。 </p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_Gu4Tv-Iw0DYbtp3lMgrXEQ.png" alt="https://docs.microsoft.com/zh-cn/windows-server/administration/windows-commands/logman"></p>
+<p>创建新的事件跟踪会话并启用 ETW providers 的另一种方法是通过位于”控制面板\系统和安全\管理工具\计算机管理\性能”中的内置Windows Performance System Tool。例子稍后给出。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_R1s-QtNnp4LlgoIpOnyuQg.png" alt=""></p>
+<h3 id="列出事件跟踪会话"><a href="#列出事件跟踪会话" class="headerlink" title="列出事件跟踪会话"></a>列出事件跟踪会话</h3><p>可以使用logman列出系统中正在运行的事件跟踪会话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logman query -ets</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_Ri3L7b9v7NgKIQ42rMwSXg.png" alt=""></p>
+<p>还可以使用Windows Performance System Tool来查看启用了哪些<code>事件跟踪会话</code>以及为它们提供事件的providers。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_t3gqRJ-iWmqxjd_unqgHgA.png" alt=""></p>
+<p>如果还想通过logman知道某个特定事件跟踪会话绑定了哪些事件provider，则可以运行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logman query &quot;EventLog-System&quot; -ets</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_TJNzINANmBVnhYl5Du0olQ.png" alt=""></p>
+<h3 id="列出ETW-Providers"><a href="#列出ETW-Providers" class="headerlink" title="列出ETW Providers"></a>列出ETW Providers</h3><p>接下来，您可以使用logman列出系统中所有可用的providers：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logman query providers</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_rg5lxywttrlPwl1shAYFzw.png" alt=""></p>
+<h3 id="查询指定Providers"><a href="#查询指定Providers" class="headerlink" title="查询指定Providers"></a>查询指定Providers</h3><p>如果我想寻找特定的ETW Providers怎么办？可以过滤<code>logman query providers</code>结果并查找特定的字符串。例如，我们可以寻找名称中带有单词<strong>Security</strong>的provider，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ETWProviders = logman query providers</span><br><span class="line">$ETWProviders | Where-Object &#123; $_ -Like &quot;*Security*&quot; &#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_z4Xk4P-9OS8aUEJg6UgAOQ.png" alt=""></p>
+<p>我们可以选择Microsoft-Windows-Security-Auditing， 并查询其元数据以获取有关它的更多信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logman query providers Microsoft-Windows-Security-Auditing</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_HfHcaHDAEFerryt-PhIjSA.png" alt=""></p>
+<p>还可以通过名为<a href="https://github.com/lallousx86/WinTools/tree/master/WEPExplorer" target="_blank" rel="noopener">Windows Events Providers Explorer（WEPExplorer）</a>的工具获取有关特定ETW providers的信息。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_rKoKCPKVKAXNiakIoVEgOA.png" alt=""></p>
+<p>还可以使用<a href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil" target="_blank" rel="noopener">wevtutil.exe</a>检索有关事件日志和发布者的信息（感谢<a href="https://twitter.com/msherman1970" target="_blank" rel="noopener">Marc Sherman</a>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; wevtutil.exe get-publisher Microsoft-Windows-Security-Auditing /getevents:true /getmessage:true</span><br></pre></td></tr></table></figure>
+<h3 id="Windows安全审计ETW-provider事件"><a href="#Windows安全审计ETW-provider事件" class="headerlink" title="Windows安全审计ETW provider事件"></a>Windows安全审计ETW provider事件</h3><p>现在我们知道，有一个事件跟踪会话已绑定到Microsoft-Windows-Security-Auditing provider，该provider使用 Security Channel 允许通过事件日志接收Security事件。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_PN1HQNj-XxbriyZbJogkyA.png" alt=""></p>
+<h2 id="可以通过事件日志处理任何ETW事件吗？"><a href="#可以通过事件日志处理任何ETW事件吗？" class="headerlink" title="可以通过事件日志处理任何ETW事件吗？"></a>可以通过事件日志处理任何ETW事件吗？</h2><p>据<a href="https://twitter.com/mattifestation" target="_blank" rel="noopener">Matt Graeber</a>的研究，只有有Channel特性的ETW provider适可以通过事件日志被处理。</p>
+<p>例如，来自 <a href="https://blogs.msdn.microsoft.com/ntdebugging/" target="_blank" rel="noopener">Microsoft Ntdebugging blog</a>的<a href="https://blogs.msdn.microsoft.com/ntdebugging/2009/09/08/part-2-exploring-and-decoding-etw-providers-using-event-log-channels/" target="_blank" rel="noopener">这篇文章</a>是按步骤的教程，关于通过Analytic channel如何为<code>Microsoft-Windows-WinINet provider</code>启用事件跟踪。</p>
+<p>我们可以从使用<a href="https://github.com/lallousx86/WinTools/tree/master/WEPExplorer" target="_blank" rel="noopener">WEPExplorer</a>工具开始，以获取有关应用于每个ETW事件的特定Channels的更多详细信息。从下面可以看到，Microsoft-Windows-WinINet/Analytic Channel已应用于Microsoft-Windows-WinINet provider中的大多数事件。因此，它们应由事件日志实时处理。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_9dkHrj7ucKNpADd5jP9fsA.png" alt=""></p>
+<h3 id="处理WinINet事件"><a href="#处理WinINet事件" class="headerlink" title="处理WinINet事件"></a>处理WinINet事件</h3><p>现在我们知道可以通过事件日志实时处理Microsoft-Windows-WinINet provider的事件，我们可以通过启用“分析和调试日志”视图来启动该过程。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_bWuBOQm8ZGkAnPpGl7pdjw.png" alt=""></p>
+<p>可能必须重新启动事件查看器控制台。可以在 应用程序和服务日志&gt;Microsoft&gt;Windows下看到一个名为WinINet（Microsoft-Windows-WinINet）的新事件日志文件夹。单击它，您将看到3个channel。右键单击分析通道，然后选择<strong>启用日志</strong>。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_RqWsPHZi4eYxtmT1LM0stA.png" alt=""></p>
+<p>单击确定。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_FE38sJbIR4_RS0DgFaP2-g.png" alt=""></p>
+<p>如果通过Microsoft Edge访问网站，您将看到Analytic Channel的事件，如下所示：</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1__nm6AjfTxoDrvpUnIxLN5A.png" alt=""></p>
+<p>您可以通过 计算机管理&gt;系统工具&gt;性能&gt;数据收集器集&gt;启动事件跟踪会话来验证WinINet provider的事件跟踪会话已启用，如下所示：</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_DRD_rBsKNr-P1Jy52nQiKg.png" alt=""></p>
+<h2 id="没有Property-Channel的ETW事件怎么办？"><a href="#没有Property-Channel的ETW事件怎么办？" class="headerlink" title="没有Property Channel的ETW事件怎么办？"></a>没有Property Channel的ETW事件怎么办？</h2><p>如果我想为providers启用事件跟踪会话，而这些事件没有Property Channel，该怎么办？例如，在攻击者动态加载自定义.NET代码以执行的情况下，我想为Microsoft-Windows-DotNET Runtime {E13C0D23-CCBC-4E12–931B-D9CC2EEE27E4} 启用事件跟踪并浏览数据。</p>
+<p>我们可以再次使用<a href="https://github.com/lallousx86/WinTools/tree/master/WEPExplorer" target="_blank" rel="noopener">Windows Events Providers Explorer</a>（WEPExplorer）工具，并验证是否可以通过事件日志实时处理那些ETW事件。不幸的是，没有将Channel properties应用于事件。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_oS4nWfYBAY9cf6ojZZ1rtA.png" alt=""></p>
+<h3 id="所以现在怎么办？"><a href="#所以现在怎么办？" class="headerlink" title="所以现在怎么办？"></a>所以现在怎么办？</h3><p>仍然可以执行此操作，但不能实时记录事件日志。你不得不：</p>
+<ul>
+<li>创建事件跟踪会话（手动）</li>
+<li>绑定ETW provider</li>
+<li>设置将要创建的.etl文件的位置</li>
+<li>启动事件跟踪会话</li>
+<li>.etl文件生成</li>
+<li>通过事件日志打开.etl日志作为已保存的日志文件</li>
+</ul>
+<p>您可以通过 计算机管理&gt;系统工具&gt;性能 下的 性能系统工具 来创建事件跟踪会话。只需要创建一个新的数据收集器集，如下图所示：</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_ZzZvC5E765-KltTxaQpLhg.png" alt=""></p>
+<p>给它命名并选择“手动创建（高级）”</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_DTcO5kxj6_f6QDWCIJDpOQ.png" alt=""></p>
+<p>接下来，选择事件跟踪provider : Microsoft-Windows-DotNETRuntime</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_s_o5N0Ct9lJghUuawX5Jew.png" alt=""></p>
+<p>可以使用下面的视图查看并修改数据收集器集的属性。例如，选择关键字，然后选择编辑。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_WlQoNZM_kFR4FFuiy7CeSQ.png" alt=""></p>
+<p>例如，您可以为.NET活动收集与JitKeyword，InteropKeyword，LoaderKeyword和NGenKeyword相关的事件子集。如果您想了解为什么我感兴趣的那些事件，你可以阅读来自<a href="https://www.countercept.com/" target="_blank" rel="noopener">Countercept team</a>的这篇<a href="https://www.countercept.com/blog/detecting-malicious-use-of-net-part-2/" target="_blank" rel="noopener">博客</a>从Countercept队。选择完这些值之后，您将获得一个位掩码：0x2038（请记住！）。接下来，单击确定和下一步。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_PgdHepALBXzfnBbkvPRUww.png" alt=""></p>
+<p>选择.etl文件的位置。保留默认位置，然后单击“ 下一步”。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_fH-4Wj8QFjay5koJokMzzw.png" alt=""></p>
+<p>保留默认值，然后单击完成。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_26VLji8KObXGmvnqghwltw.png" alt=""></p>
+<p>您可以看到新的事件跟踪会话可用，但状态为Stopped。您也可以双击检查事件跟踪会话开始后将创建的.etl文件的位置和名称。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_stbrpP0myYxdUbhKRkDQug.png" alt=""></p>
+<p>右键单击新的事件跟踪会话，然后选择“ 启动”。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_hYLfJhLe_QH05cgl5JpHyg.png" alt=""></p>
+<p>事件跟踪会话现在正在运行，但是除非获取.etl文件的副本并将其作为已保存的日志打开，否则您将不会在事件日志中看到它。您将无法连续提取事件日志。为了作为保存的日志打开.etl文件，请转到事件查看器控制台，然后单击操作&gt;打开保存的日志。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_0E9nRCrjfgoGewqbqzSBwg.png" alt=""></p>
+<p>选择与事件跟踪会话关联的.etl文件，然后单击“ 打开”。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_oHHo-ba4v0HRW5PEsq61YA.png" alt=""></p>
+<p>出现提示后，请单击“是”以创建副本</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_cpfkFzOt04RJ1DiH6_8iaw.png" alt=""></p>
+<p>您可以保留默认位置以显示外部日志。单击确定。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_5NfTBbIAzKDRwLs35nB1eg.png" alt=""></p>
+<p>就这样！那很容易吧？</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_H624rrShkq3hB2LDI-GWww.png" alt=""></p>
+<p>即使我能够从Microsoft-Windows-DotNETRuntime provider获取事件，但这也不是对事件日志的连续实时提取。默认情况下，那些ETW事件没有Channel。 实现对事件日志的实时提取的一种方法是编写使用ETW API并启用该功能的应用程序。</p>
+<h2 id="SilkETW"><a href="#SilkETW" class="headerlink" title="SilkETW"></a>SilkETW</h2><p><a href="https://twitter.com/FuzzySec" target="_blank" rel="noopener">Ruben Boonen</a>提出了一种通过C＃包装程序执行此操作的方法，并开发了一个名为<a href="https://github.com/fireeye/SilkETW" target="_blank" rel="noopener">SilkETW</a>的工具，可为ETW事件收集，过滤和提取提供直接接口。该项目提供了两种与ETW组件进行交互的方式。一种是通过命令行，另一种是通过运行SilkETW作为服务。</p>
+<p><a href="https://twitter.com/Cyb3rWard0g/status/1108592833349464064" target="_blank" rel="noopener">https://twitter.com/Cyb3rWard0g/status/1108592833349464064</a></p>
+<p>我的兄弟Jose Luis Rodriguez和我对此版本感到非常兴奋。</p>
+<p>我们决定在实验室环境中对其进行测试，并使用它来处理来自 Microsoft-Windows-LDAP-Client provider 的事件，同时通过Will通过<a href="https://github.com/PowerShellMafia/PowerSploit/tree/dev/Recon" target="_blank" rel="noopener">Powerview</a>执行一些LDAP筛选器。我将在本系列的下一部分中逐步介绍一些示例。现在，我可以向您展示如何安装SilkETW。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>从 <a href="https://github.com/fireeye/SilkETW/releases" target="_blank" rel="noopener">https://github.com/fireeye/SilkETW/releases</a> 下载最新的发行包并解压压缩文件（撰写本文时，最新的版本是0.8）</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_-vRj4zzG6dRf1UIZrUrNzQ.png" alt=""></p>
+<p>您将看到两个文件夹：SilkETW和SilkService。这就是您如何区分运行SilkETW的方式。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_4ZtAkWq2qF2dU1WbwEAO_g.png" alt=""></p>
+<p>此外，在Dependencies文件夹，你会发现，你需要运行前要求的二进制文件（千万不要跳过这一步！）</p>
+<ul>
+<li><p>安装VC++ 2015 x86可再发行组件包<br>Dependencies\vc2015_redist.x86.exe或从 <a href="https://www.microsoft.com/zh-cn/download/details.aspx?id=48145" target="_blank" rel="noopener">https://www.microsoft.com/zh-cn/download/details.aspx?id=48145</a> 下载</p>
+</li>
+<li><p>至少安装v4.5的.NET Framework<br>Dependencies\dotNetFx45_Full_setup.exe或从 <a href="https://www.microsoft.com/zh-cn/download/details.aspx?id=30653" target="_blank" rel="noopener">https://www.microsoft.com/zh-cn/download/details.aspx?id=30653</a> 下载</p>
+</li>
+</ul>
+<h2 id="SilkETW-CLI"><a href="#SilkETW-CLI" class="headerlink" title="SilkETW CLI"></a>SilkETW CLI</h2><p>您无需执行任何其他操作即可开始使用它的CLI版本和基本选项。以管理员身份打开一个终端，然后运行SilkETW文件夹中的二进制文件以了解该工具的可用选项。（Downloads&gt;SilkETW_SilkService_v8&gt;v8&gt;SilkETW）</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_muBU-6x4Ru5Q9YSGs2wj6g.png" alt=""></p>
+<h2 id="Microsoft-Windows-DotNETRuntime的事件跟踪"><a href="#Microsoft-Windows-DotNETRuntime的事件跟踪" class="headerlink" title="Microsoft-Windows-DotNETRuntime的事件跟踪"></a>Microsoft-Windows-DotNETRuntime的事件跟踪</h2><p>还记得我们与没有property Channel的<br>ETW provider进行交互所需要做的所有操作吗？这些是通过事件日志从Microsoft-Windows-DotNETRuntime provider使用相同的关键字过滤器处理ETW事件的参数：</p>
+<ul>
+<li>-pn Microsoft-Windows-DotNETRuntime</li>
+<li>-ot eventlog</li>
+<li>-uk 0x2038<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; SilkETW.exe -t user -pn Microsoft-Windows-DotNETRuntime -uk 0x2038 -ot eventlog</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_yhktdRrnmGm5xFCMqC_DJw.png" alt=""></p>
+<p>这里要指出的重要一点是，事件的收集是连续的，并直接推送到SilkETW-Log事件日志。但是，正如您在cmd终端中看到的那样，它不是一个在后台无UI运行的收集器。这非常适合调试和分析研究期间任何代码执行所生成的ETW事件。使用CTRL-C停止收集器。</p>
+<h2 id="无头模式下的SilkETW-SilkService"><a href="#无头模式下的SilkETW-SilkService" class="headerlink" title="无头模式下的SilkETW = SilkService"></a>无头模式下的SilkETW = SilkService</h2><p>根据<a href="https://github.com/fireeye/SilkETW#silkservice" target="_blank" rel="noopener">GitHub README</a>中的设置说明，您可以通过在提升的提示符下使用以下命令来安装服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc create SillkService binPath= &quot;C:\Path\To\SilkService.exe&quot; start= demand</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_uxXa0wRJcVk0oURylJdsJg.png" alt=""></p>
+<h2 id="构建SilkService-XML配置"><a href="#构建SilkService-XML配置" class="headerlink" title="构建SilkService XML配置"></a>构建SilkService XML配置</h2><p>在启动SilkService之前，您必须创建自己的SilkServiceConfig.xml文件并将其放置在与服务二进制文件相同的目录中（即Downloads&gt;SilkETW_Service_v8\v8\SilkService）。这是Ruben提供的模板，提供了多个选项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;SilkServiceConfig&gt;</span><br><span class="line">	&lt;!--</span><br><span class="line">		This is a user collector</span><br><span class="line">		-&gt; Microsoft-Windows-DotNETRuntime</span><br><span class="line">		-&gt; GUID or string based name</span><br><span class="line">	--&gt;</span><br><span class="line">	&lt;ETWCollector&gt;</span><br><span class="line">		&lt;Guid&gt;45c82358-c52d-4892-8237-ba001d396fb4&lt;/Guid&gt;</span><br><span class="line">		&lt;CollectorType&gt;user&lt;/CollectorType&gt;</span><br><span class="line">		&lt;ProviderName&gt;e13c0d23-ccbc-4e12-931b-d9cc2eee27e4&lt;/ProviderName&gt;</span><br><span class="line">		&lt;UserKeywords&gt;0x2038&lt;/UserKeywords&gt;</span><br><span class="line">		&lt;OutputType&gt;url&lt;/OutputType&gt;</span><br><span class="line">		&lt;Path&gt;https://some.elk:9200/NetETW/_doc/&lt;/Path&gt;</span><br><span class="line">	&lt;/ETWCollector&gt;</span><br><span class="line">	&lt;!--</span><br><span class="line">		This is a user collector</span><br><span class="line">	--&gt;</span><br><span class="line">	&lt;ETWCollector&gt;</span><br><span class="line">		&lt;Guid&gt;6720babc-dedc-4906-86b9-d0bc0089ec50&lt;/Guid&gt;</span><br><span class="line">		&lt;CollectorType&gt;user&lt;/CollectorType&gt;</span><br><span class="line">		&lt;ProviderName&gt;Microsoft-Windows-DNS-Client&lt;/ProviderName&gt;</span><br><span class="line">		&lt;OutputType&gt;eventlog&lt;/OutputType&gt;</span><br><span class="line">		&lt;YaraScan&gt;C:\Some\Path\RuleFolder&lt;/YaraScan&gt;</span><br><span class="line">		&lt;YaraOptions&gt;Matches&lt;/YaraOptions&gt;</span><br><span class="line">	&lt;/ETWCollector&gt;</span><br><span class="line">	&lt;!--</span><br><span class="line">		This is a kernel collector</span><br><span class="line">	--&gt;</span><br><span class="line">	&lt;ETWCollector&gt;</span><br><span class="line">		&lt;Guid&gt;21ac2393-3bbb-4702-a01c-b593e21913dc&lt;/Guid&gt;</span><br><span class="line">		&lt;CollectorType&gt;kernel&lt;/CollectorType&gt;</span><br><span class="line">		&lt;KernelKeywords&gt;Process&lt;/KernelKeywords&gt;</span><br><span class="line">		&lt;OutputType&gt;file&lt;/OutputType&gt;</span><br><span class="line">		&lt;Path&gt;C:\Users\b33f\Desktop\kproc.json&lt;/Path&gt;</span><br><span class="line">	&lt;/ETWCollector&gt;</span><br><span class="line">&lt;/SilkServiceConfig&gt;</span><br></pre></td></tr></table></figure>
+<p>根据我们通过事件日志处理Microsoft-Windows-DotNETRuntime事件的示例，可以使用以下基本配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;SilkServiceConfig&gt;</span><br><span class="line">    &lt;!--</span><br><span class="line">        Microsoft-Windows-DotNETRuntime ETW Provider</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;ETWCollector&gt;</span><br><span class="line">        &lt;Guid&gt;072e0373-213b-4e3d-881a-6430d6d9e369&lt;/Guid&gt;</span><br><span class="line">        &lt;CollectorType&gt;user&lt;/CollectorType&gt;</span><br><span class="line">        &lt;ProviderName&gt;e13c0d23-ccbc-4e12-931b-d9cc2eee27e4&lt;/ProviderName&gt;</span><br><span class="line">        &lt;UserKeywords&gt;0x2038&lt;/UserKeywords&gt;</span><br><span class="line">        &lt;OutputType&gt;eventlog&lt;/OutputType&gt;</span><br><span class="line">    &lt;/ETWCollector&gt;</span><br><span class="line">&lt;/SilkServiceConfig&gt;</span><br></pre></td></tr></table></figure>
+<p>请记住，<guid>字段是您生成的随机GUID。当我开始使用这些配置时，我以为是provider GUID。接下来，复制DotNETRuntime配置，将其重命名为SilkServiceConfig.xml，并将其放置在与服务二进制文件相同的目录中。</guid></p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_c4uJf3dR6QV_03DUglQA-A.png" alt=""></p>
+<h2 id="启动SilkService"><a href="#启动SilkService" class="headerlink" title="启动SilkService"></a>启动SilkService</h2><p>打开 服务&gt;右键单击SilkService&gt;开始。将在SilkService文件夹下创建一个名为Logs的新文件夹。在此您将找到一个日志文件，该文件将告诉您更多有关收集器状态以及SilkServiceConfig.xml提供的参数的信息是否已成功验证通过。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_c0fCRiSb-q1Xr7gxgGG0QQ.png" alt=""></p>
+<p>如果再次打开Event Viewer（重新启动），您将看到有一个名为SilkService-Log的新事件日志。在那里，您将能够从Microsoft-Windows-DotNETRuntime provider中连续实时提取ETW事件。</p>
+<p><img src="/2019/10/25/利用-FireEye-开源的-SilkETW-工具实现基于-ETW-Events-的威胁检测/1_BeIonS653zAn8F6uXa26yA.png" alt=""></p>
+<h3 id="SilkService-XML配置元素"><a href="#SilkService-XML配置元素" class="headerlink" title="SilkService XML配置元素"></a>SilkService XML配置元素</h3><p>如果要修改SilkService配置并添加其他XML元素，这是可以在配置上使用的选项的列表。鲁宾的repo中有很多例子，还有<a href="https://github.com/FuzzySecurity/BH-Arsenal-2019" target="_blank" rel="noopener">BH Arsenal 2019</a>的一些演示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// Define XML elements            </span><br><span class="line">XName CI = XName.Get(&quot;ETWCollector&quot;);</span><br><span class="line">XName CG = XName.Get(&quot;Guid&quot;);</span><br><span class="line">XName CT = XName.Get(&quot;CollectorType&quot;);</span><br><span class="line">XName KK = XName.Get(&quot;KernelKeywords&quot;);</span><br><span class="line">XName OT = XName.Get(&quot;OutputType&quot;);</span><br><span class="line">XName P = XName.Get(&quot;Path&quot;);</span><br><span class="line">XName PN = XName.Get(&quot;ProviderName&quot;);</span><br><span class="line">XName UTEL = XName.Get(&quot;UserTraceEventLevel&quot;);</span><br><span class="line">XName UK = XName.Get(&quot;UserKeywords&quot;);</span><br><span class="line">XName FO = XName.Get(&quot;FilterOption&quot;);</span><br><span class="line">XName FV = XName.Get(&quot;FilterValue&quot;);</span><br><span class="line">XName YS = XName.Get(&quot;YaraScan&quot;);</span><br><span class="line">XName YO = XName.Get(&quot;YaraOptions&quot;);</span><br></pre></td></tr></table></figure>
+<p>此外，请确认其他人使用SilkETW的方式以获取一些想法。该<a href="https://blog.iisreset.me/tracing-as-a-service-with-silketw-pt/" target="_blank" rel="noopener">博客文章</a>由<a href="https://twitter.com/IISResetMe" target="_blank" rel="noopener">马蒂亚斯·耶森</a>，介绍了如何将事件写入一个文件（JSON）。</p>
+<h2 id="SilkETW事件类型"><a href="#SilkETW事件类型" class="headerlink" title="SilkETW事件类型"></a>SilkETW事件类型</h2><p>在查看事件日志时，还必须知道SilkETW提供了哪些事件。这与每个provider提供的事件完全不同。根据<a href="https://github.com/fireeye/SilkETW/issues/1" target="_blank" rel="noopener">问题1</a>，日志具有四种事件ID类型：<br>事件ID = 0-&gt;收集器启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;Collector&quot;: &quot;Start&quot;,</span><br><span class="line">  &quot;Data&quot;: &#123;</span><br><span class="line">    &quot;Type&quot;: &quot;User&quot;,</span><br><span class="line">    &quot;Provider&quot;: &quot;Microsoft-Windows-DotNETRuntime&quot;,</span><br><span class="line">    &quot;Keywords&quot;: &quot;0x2038&quot;,</span><br><span class="line">    &quot;FilterOption&quot;: &quot;None&quot;,</span><br><span class="line">    &quot;FilterValue&quot;: &quot;&quot;,</span><br><span class="line">    &quot;YaraPath&quot;: &quot;&quot;,</span><br><span class="line">    &quot;YaraOption&quot;: &quot;None&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>事件ID = 1-&gt;收集器被用户终止</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;Collector&quot;: &quot;Stop&quot;,</span><br><span class="line">  &quot;Error&quot;: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>事件ID = 2-&gt;收集器被错误终止<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;Collector&quot;: &quot;Stop&quot;,</span><br><span class="line">  &quot;Error&quot;: true,</span><br><span class="line">  &quot;ErrorCode&quot;: 3</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>事件ID = 3-&gt;已记录的事件<br>这只是收集器记录的事件的原始JSON。</p>
+<p>这是本系列的第一篇文章。我希望这对想要玩SilkETW并通过事件日志实时使用事件的人有所帮助。在下一篇文章中，我将向您展示如何将ETW事件从事件日志发送到<a href="https://github.com/Cyb3rWard0g/HELK" target="_blank" rel="noopener">HELK堆栈</a>。<br>感谢您的阅读！并随时欢迎反馈！</p>
+<p>感谢鲁宾的所有帮助和耐心！</p>
+<p>更新：<br>19/09/2019 马克·谢尔曼的建议</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://docs.microsoft.com/zh-CN/windows/win32/etw/about-event-tracing" target="_blank" rel="noopener">https://docs.microsoft.com/zh-CN/windows/win32/etw/about-event-tracing</a><br><a href="https://blogs.msdn.microsoft.com/ntdebugging/2009/08/27/part-1-etw-introduction-and-overview/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/ntdebugging/2009/08/27/part-1-etw-introduction-and-overview/</a><br><a href="https://github.com/fireeye/SilkETW" target="_blank" rel="noopener">https://github.com/fireeye/SilkETW</a><br><a href="https://github.com/FuzzySecurity/BH-Arsenal-2019" target="_blank" rel="noopener">https://github.com/FuzzySecurity/BH-Arsenal-2019</a><br><a href="https://github.com/fireeye/SilkETW/issues/1" target="_blank" rel="noopener">https://github.com/fireeye/SilkETW/issues/1</a><br><a href="https://github.com/FuzzySecurity/BH-Arsenal-2019/blob/master/Ruben%20Boonen%20-%20BHArsenal_SilkETW_v0.2.pdf" target="_blank" rel="noopener">https://github.com/FuzzySecurity/BH-Arsenal-2019/blob/master/Ruben%20Boonen%20-%20BHArsenal_SilkETW_v0.2.pdf</a><br><a href="https://medium.com/palantir/tampering-with-windows-event-tracing-background-offense-and-defense-4be7ac62ac63" target="_blank" rel="noopener">https://medium.com/palantir/tampering-with-windows-event-tracing-background-offense-and-defense-4be7ac62ac63</a><br><a href="https://medium.com/palantir/tampering-with-windows-event-tracing-background-offense-and-defense-4be7ac62ac63" target="_blank" rel="noopener">https://medium.com/palantir/tampering-with-windows-event-tracing-background-offense-and-defense-4be7ac62ac63</a><br><a href="https://blogs.msdn.microsoft.com/ntdebugging/2009/09/08/part-2-exploring-and-decoding-etw-providers-using-event-log-channels/" target="_blank" rel="noopener">https://blogs.msdn.microsoft.com/ntdebugging/2009/09/08/part-2-exploring-and-decoding-etw-providers-using-event-log-channels/</a><br><a href="https://docs.microsoft.com/zh-CN/windows/win32/wes/defining-channels" target="_blank" rel="noopener">https://docs.microsoft.com/zh-CN/windows/win32/wes/defining-channels</a><br><a href="https://www.countercept.com/blog/detecting-malicious-use-of-net-part-1/" target="_blank" rel="noopener">https://www.countercept.com/blog/detecting-malicious-use-of-net-part-1/</a><br><a href="https://www.countercept.com/blog/detecting-malicious-use-of-net-part-2/" target="_blank" rel="noopener">https://www.countercept.com/blog/detecting-malicious-use-of-net-part-2/</a><br><a href="https://blogs.technet.microsoft.com/office365security/hidden-treasure-intrusion-detection-with-etw-part-2/" target="_blank" rel="noopener">https://blogs.technet.microsoft.com/office365security/hidden-treasure-intrusion-detection-with-etw-part-2/</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/看雪翻译小组/" rel="tag"># 看雪翻译小组</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/15/攻击场景复现论文总结/" rel="next" title="攻击场景复现论文总结">
+                <i class="fa fa-chevron-left"></i> 攻击场景复现论文总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wangxy</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是ETW？"><span class="nav-number">1.</span> <span class="nav-text">什么是ETW？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#探索ETW组件"><span class="nav-number">2.</span> <span class="nav-text">探索ETW组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Controllers"><span class="nav-number">2.1.</span> <span class="nav-text">Controllers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列出事件跟踪会话"><span class="nav-number">2.2.</span> <span class="nav-text">列出事件跟踪会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列出ETW-Providers"><span class="nav-number">2.3.</span> <span class="nav-text">列出ETW Providers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询指定Providers"><span class="nav-number">2.4.</span> <span class="nav-text">查询指定Providers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows安全审计ETW-provider事件"><span class="nav-number">2.5.</span> <span class="nav-text">Windows安全审计ETW provider事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以通过事件日志处理任何ETW事件吗？"><span class="nav-number">3.</span> <span class="nav-text">可以通过事件日志处理任何ETW事件吗？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#处理WinINet事件"><span class="nav-number">3.1.</span> <span class="nav-text">处理WinINet事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#没有Property-Channel的ETW事件怎么办？"><span class="nav-number">4.</span> <span class="nav-text">没有Property Channel的ETW事件怎么办？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#所以现在怎么办？"><span class="nav-number">4.1.</span> <span class="nav-text">所以现在怎么办？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SilkETW"><span class="nav-number">5.</span> <span class="nav-text">SilkETW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">6.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SilkETW-CLI"><span class="nav-number">7.</span> <span class="nav-text">SilkETW CLI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Microsoft-Windows-DotNETRuntime的事件跟踪"><span class="nav-number">8.</span> <span class="nav-text">Microsoft-Windows-DotNETRuntime的事件跟踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无头模式下的SilkETW-SilkService"><span class="nav-number">9.</span> <span class="nav-text">无头模式下的SilkETW = SilkService</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建SilkService-XML配置"><span class="nav-number">10.</span> <span class="nav-text">构建SilkService XML配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动SilkService"><span class="nav-number">11.</span> <span class="nav-text">启动SilkService</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SilkService-XML配置元素"><span class="nav-number">11.1.</span> <span class="nav-text">SilkService XML配置元素</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SilkETW事件类型"><span class="nav-number">12.</span> <span class="nav-text">SilkETW事件类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">13.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wangxy"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangxy</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
